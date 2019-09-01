@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <script src="lib/jquery-3.4.1.js"></script>
+    <script src="bootstrap/js/bootstrap.js"></script>
+    <title>Document</title>
+</head>
+<body>
+<div id="info"></div>
+
+<script>
+    let info = document.querySelector('#info');
+
+
+    class Animal {
+        constructor(){
+        }
+        eat(){
+            return 'eat something';
+        }
+    }
+
+    class Fish extends Animal {
+        swim(){
+            return 'fish swims';
+        }
+    }
+
+    class Cat extends Animal {
+        mow(){
+            return 'mow mow';
+        }
+    }
+
+    class Whale extends Animal {
+        swim(){
+            return 'whale swims';
+        }
+    }
+
+    let animals = [new Fish(), new Whale(), new Cat()];
+
+    animals.forEach(function(ani){
+        info.innerHTML += ani + '<br>';
+        if(ani.swim){
+            info.innerHTML += ani.swim() + '<br>';
+        }
+
+    });
+
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+    "name": "student/htdocs",
+    "authors": [
+        {
+            "name": "Benson Chen",
+            "email": "troy0606troy0606@gmail.com"
+        }
+    ],
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.8"
+    }
+}

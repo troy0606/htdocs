@@ -1,0 +1,9 @@
+CREATE TABLE `address_book` (
+  `sid` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `birthday` date NOT NULL,
+  `create_at` datetime NOT NULL,
+  `mobile` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

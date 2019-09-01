@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+    <script src="/lib/jquery-3.4.1.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.js"></script>
+    <title>bootstrap</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 使用POST發request時，資料會放在headers，網址列看得到 -->
+        <form action="/0814/Querystring.php" method="GET">
+            <!-- action 會將值傳入目標檔案的參數中，並跳到目標檔案 -->
+            <!-- 必須使用method="GET"，才可以將參數傳入目標檔案 -->
+            <div class="form-group">
+                <label for="a">a.value</label>
+                <input type="text" class="form-control" id="a" name="a"
+                    placeholder="Enter a">
+                    <!-- 設定name來指定傳入的變數位置 -->
+            </div>
+            <div class="form-group">
+                <label for="b">b.value</label>
+                <input type="text" class="form-control" id="b" name="b"
+                placeholder="Enter b">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</body>
+
+</html>
