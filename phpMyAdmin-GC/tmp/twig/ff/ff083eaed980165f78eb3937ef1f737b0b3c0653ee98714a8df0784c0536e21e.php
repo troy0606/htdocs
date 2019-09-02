@@ -89,6 +89,6 @@ class __TwigTemplate_001fda9509cb0305723e9b79907ed29f3bc448edb74345f234e193a041c
 
     public function getSourceContext()
     {
-        return new Source("", "console/toolbar.twig", "C:\\xampp\\htdocs\\small-project\\phpMyAdmin-GC\\templates\\console\\toolbar.twig");
+        return new Source("", "console/toolbar.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\console\\toolbar.twig");
     }
 }

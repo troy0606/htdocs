@@ -582,6 +582,6 @@ class __TwigTemplate_09d4eb8898e06f014530753adb5bb28b807a357815a89a10843abfda4f2
 
     public function getSourceContext()
     {
-        return new Source("", "database/structure/structure_table_row.twig", "C:\\xampp\\phpMyAdmin\\templates\\database\\structure\\structure_table_row.twig");
+        return new Source("", "database/structure/structure_table_row.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\database\\structure\\structure_table_row.twig");
     }
 }

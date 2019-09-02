@@ -93,6 +93,6 @@ class __TwigTemplate_301bdc1a1c1662e8f9266b2603556a0e5b0c9eac383bdca3374d8251a08
 
     public function getSourceContext()
     {
-        return new Source("", "display/results/show_all_checkbox.twig", "C:\\xampp\\htdocs\\small-project\\phpMyAdmin-GC\\templates\\display\\results\\show_all_checkbox.twig");
+        return new Source("", "display/results/show_all_checkbox.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\display\\results\\show_all_checkbox.twig");
     }
 }

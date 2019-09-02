@@ -24,18 +24,37 @@ $exts = [
     'image/jpeg' => '.jpg',
 ];
 
+$sid = intval($_POST['pic_name']);
+$sql = " SELECT * FROM `ingredient` WHERE `sid`=$sid ";
+$row = $pdo->query($sql)->fetch();
+$array_pic = $row['pic_name'];
 
-if (!empty($_FILES['pic_name'])) {
-    foreach($_FILES['pic_name']['name'] as $k => $v){
+if ( !empty($_FILES['pic_name']['name']) and count($_FILES['pic_name']['name'])>0) {
+    $pic_array = [];
+    foreach ($_FILES['pic_name']['name'] as $k => $v) {
+        if(empty($v)) break;
         $new_filename = $_FILES['pic_name']['name'][$k];
-        $new_ext = $allowed_types[$_FILES['pic_name']['type'][$k]];
-        move_uploaded_file($_FILES['pic_name']['tmp_name'][$k],$upload_dir.$new_filename.$new_ext);
-        $pic_array[] = $new_filename.$new_ext;
+        $new_ext = $exts[$_FILES['pic_name']['type'][$k]];
+        move_uploaded_file($_FILES['pic_name']['tmp_name'][$k], $upload_dir . $new_filename . $new_ext);
+        $pic_array[] = $new_filename . $new_ext;
+       
+    }
+    if(!empty($pic_array)){
+        $array_pic = json_encode($pic_array, JSON_UNESCAPED_UNICODE);
     }
 }
 
+// if (!empty($_FILES['pic_name'])) {
+//     foreach($_FILES['pic_name']['name'] as $k => $v){
+//         $new_filename = $_FILES['pic_name']['name'][$k];
+//         $new_ext = $exts[$_FILES['pic_name']['type'][$k]];
+//         move_uploaded_file($_FILES['pic_name']['tmp_name'][$k],$upload_dir.$new_filename.$new_ext);
+//         $pic_array[] = $new_filename.$new_ext;
+//     }
+// }
 
-$array_pic = json_encode($pic_array, JSON_UNESCAPED_UNICODE);
+
+// $array_pic = json_encode($pic_array, JSON_UNESCAPED_UNICODE);
 
 $tag_str = (!empty($_POST['tag'])) ? json_encode($_POST['tag'], JSON_UNESCAPED_UNICODE) : '[]';
 

@@ -79,6 +79,6 @@ class __TwigTemplate_21734ccb60ec13c44acc4c89a575bb15999a0cb6667365bca6e5f455f7d
 
     public function getSourceContext()
     {
-        return new Source("", "display/results/comment_for_row.twig", "C:\\xampp\\htdocs\\small-project\\phpMyAdmin-GC\\templates\\display\\results\\comment_for_row.twig");
+        return new Source("", "display/results/comment_for_row.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\display\\results\\comment_for_row.twig");
     }
 }

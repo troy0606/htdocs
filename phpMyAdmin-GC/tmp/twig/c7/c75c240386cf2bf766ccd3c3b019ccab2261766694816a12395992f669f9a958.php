@@ -73,6 +73,6 @@ class __TwigTemplate_e26f57fe8bbb9cc600aac4774de16358f0b8e85c332af04a11aaa31f065
 
     public function getSourceContext()
     {
-        return new Source("", "display/results/null_display.twig", "C:\\xampp\\htdocs\\small-project\\phpMyAdmin-GC\\templates\\display\\results\\null_display.twig");
+        return new Source("", "display/results/null_display.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\display\\results\\null_display.twig");
     }
 }

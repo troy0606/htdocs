@@ -164,6 +164,6 @@ class __TwigTemplate_0029bb2b701678c50c0fabc7133da9fd9db82e16a6d815388de99123823
 
     public function getSourceContext()
     {
-        return new Source("", "display/export/options_output.twig", "C:\\xampp\\phpMyAdmin\\templates\\display\\export\\options_output.twig");
+        return new Source("", "display/export/options_output.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\display\\export\\options_output.twig");
     }
 }

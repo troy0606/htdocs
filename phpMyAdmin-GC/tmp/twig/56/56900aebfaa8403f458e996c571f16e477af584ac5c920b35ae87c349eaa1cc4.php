@@ -72,6 +72,6 @@ class __TwigTemplate_5c5e6631ead2542bb32e52c6743c879df5dbe665c41da1265dbee04ba6c
 
     public function getSourceContext()
     {
-        return new Source("", "table/structure/move_columns_dialog.twig", "C:\\xampp\\htdocs\\phpMyAdmin-self\\templates\\table\\structure\\move_columns_dialog.twig");
+        return new Source("", "table/structure/move_columns_dialog.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\table\\structure\\move_columns_dialog.twig");
     }
 }

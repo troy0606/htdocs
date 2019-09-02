@@ -80,6 +80,6 @@ class __TwigTemplate_8c5c1488fa26fde449646564e1f71f21d0e7fcafbe8163ab9d59ebbca40
 
     public function getSourceContext()
     {
-        return new Source("", "display/export/options_output_format.twig", "C:\\xampp\\phpMyAdmin\\templates\\display\\export\\options_output_format.twig");
+        return new Source("", "display/export/options_output_format.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\display\\export\\options_output_format.twig");
     }
 }

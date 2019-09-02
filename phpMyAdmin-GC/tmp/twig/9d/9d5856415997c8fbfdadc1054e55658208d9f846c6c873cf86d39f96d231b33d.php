@@ -85,6 +85,6 @@ class __TwigTemplate_3b7a585ef23e85f09dbc3cddee2fa97021f4454c4ba56291a28e71ea9b1
 
     public function getSourceContext()
     {
-        return new Source("", "display/export/option_header.twig", "C:\\xampp\\phpMyAdmin\\templates\\display\\export\\option_header.twig");
+        return new Source("", "display/export/option_header.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\display\\export\\option_header.twig");
     }
 }

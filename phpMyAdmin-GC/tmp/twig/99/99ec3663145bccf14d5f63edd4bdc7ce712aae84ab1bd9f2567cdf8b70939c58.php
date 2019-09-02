@@ -95,6 +95,6 @@ class __TwigTemplate_7cc43756f41eb6d0d4fc2acad7a6e746f4ac88ac563faa54b9e497cb52f
 
     public function getSourceContext()
     {
-        return new Source("", "console/query_action.twig", "C:\\xampp\\htdocs\\small-project\\phpMyAdmin-GC\\templates\\console\\query_action.twig");
+        return new Source("", "console/query_action.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\console\\query_action.twig");
     }
 }

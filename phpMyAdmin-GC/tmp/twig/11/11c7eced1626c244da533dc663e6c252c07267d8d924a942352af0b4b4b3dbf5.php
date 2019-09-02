@@ -134,6 +134,6 @@ class __TwigTemplate_dcc1d60b400e5646a4f0749a35c1368c1dfef14f2d90a4e8ab853d7e9d3
 
     public function getSourceContext()
     {
-        return new Source("", "table/structure/optional_action_links.twig", "C:\\xampp\\htdocs\\phpMyAdmin-self\\templates\\table\\structure\\optional_action_links.twig");
+        return new Source("", "table/structure/optional_action_links.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\table\\structure\\optional_action_links.twig");
     }
 }

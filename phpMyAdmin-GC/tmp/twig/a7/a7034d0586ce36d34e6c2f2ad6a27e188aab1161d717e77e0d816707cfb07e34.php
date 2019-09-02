@@ -84,6 +84,6 @@ class __TwigTemplate_2e05588892991a2c09a9807c36283b59bc48a434555b503b17e6c3f09f9
 
     public function getSourceContext()
     {
-        return new Source("", "navigation/logo.twig", "C:\\xampp\\htdocs\\small-project\\phpMyAdmin-GC\\templates\\navigation\\logo.twig");
+        return new Source("", "navigation/logo.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\navigation\\logo.twig");
     }
 }

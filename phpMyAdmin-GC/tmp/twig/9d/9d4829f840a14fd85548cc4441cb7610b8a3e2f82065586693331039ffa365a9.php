@@ -136,6 +136,6 @@ class __TwigTemplate_739e2ea80c65a381a9a2d477f23c1029f1f6e2ff350950bbb6c86043a0c
 
     public function getSourceContext()
     {
-        return new Source("", "table/structure/add_column.twig", "C:\\xampp\\htdocs\\phpMyAdmin-self\\templates\\table\\structure\\add_column.twig");
+        return new Source("", "table/structure/add_column.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\table\\structure\\add_column.twig");
     }
 }

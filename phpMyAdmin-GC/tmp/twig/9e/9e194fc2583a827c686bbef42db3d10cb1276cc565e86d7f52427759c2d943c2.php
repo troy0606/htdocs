@@ -79,6 +79,6 @@ class __TwigTemplate_1f1e73d9af211012acea6269aa0d60b43bf8eef999fc8d14fa2f4178626
 
     public function getSourceContext()
     {
-        return new Source("", "display/results/multi_row_operations_form.twig", "C:\\xampp\\htdocs\\small-project\\phpMyAdmin-GC\\templates\\display\\results\\multi_row_operations_form.twig");
+        return new Source("", "display/results/multi_row_operations_form.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\display\\results\\multi_row_operations_form.twig");
     }
 }

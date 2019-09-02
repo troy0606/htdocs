@@ -85,6 +85,6 @@ class __TwigTemplate_d391a022eb672a9f2fca11a5c65b2efadd4d83372314366500d3cfbaf01
 
     public function getSourceContext()
     {
-        return new Source("", "config/form_display/fieldset_bottom.twig", "C:\\xampp\\htdocs\\small-project\\phpMyAdmin-GC\\templates\\config\\form_display\\fieldset_bottom.twig");
+        return new Source("", "config/form_display/fieldset_bottom.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\config\\form_display\\fieldset_bottom.twig");
     }
 }

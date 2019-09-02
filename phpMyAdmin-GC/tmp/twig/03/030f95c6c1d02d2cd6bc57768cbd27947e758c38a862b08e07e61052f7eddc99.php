@@ -81,6 +81,6 @@ class __TwigTemplate_39f117ee6792b3b8ea7153ec2f97c4de02c8b7710e66a224f9d926167b8
 
     public function getSourceContext()
     {
-        return new Source("", "display/results/additional_fields.twig", "C:\\xampp\\htdocs\\small-project\\phpMyAdmin-GC\\templates\\display\\results\\additional_fields.twig");
+        return new Source("", "display/results/additional_fields.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\display\\results\\additional_fields.twig");
     }
 }

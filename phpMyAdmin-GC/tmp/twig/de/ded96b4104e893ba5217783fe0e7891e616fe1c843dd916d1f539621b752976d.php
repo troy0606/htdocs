@@ -127,6 +127,6 @@ class __TwigTemplate_8cca680153bc0a862f247d3a03245bd1b6d0e4e5ffa1f62e3e7b0c17901
 
     public function getSourceContext()
     {
-        return new Source("", "select_lang.twig", "C:\\xampp\\htdocs\\small-project\\phpMyAdmin-GC\\templates\\select_lang.twig");
+        return new Source("", "select_lang.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\select_lang.twig");
     }
 }

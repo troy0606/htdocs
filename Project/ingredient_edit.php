@@ -20,8 +20,6 @@ $sql = "SELECT * FROM `categories`";
 $stmt = $pdo->query($sql);
 $rows2 = $stmt->fetchAll();
 
-$sort_sid_now = $row['minor-category'];
-
 $level1 = [];
 
 // 拿第一層
@@ -93,7 +91,7 @@ $checkedTag = json_decode($row['tag'], true);
                                     <?php $v = json_decode($row['pic_name']) ?>
                                     <?php $i = 0; ?>
                                     <?php foreach ($v as $a) : ?>
-                                        <div class="carousel-item <?= $i == 0 ? "active" : " "; ?>  " data-interval="10000">
+                                        <div class="carousel-item <?= $i == 0 ? "active" : " "; ?>  " data-interval="1000">
                                             <img src="uploads/<?= $a; ?>" class="d-block w-100" alt="...">
                                         </div>
                                         <?php $i = $i + 1; ?>

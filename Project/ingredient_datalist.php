@@ -1,15 +1,17 @@
 <?php
+
+use PhpMyAdmin\Console;
+
+
 $page_name = 'datalist';
 $page_title = '全部商品列表';
 require __DIR__ . "/ingredient_connect.php";
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 // $totalPage = $totalRows / $perPage;
 $tst = $pdo->query('SELECT COUNT(*) FROM `ingredient`');
-
 $perPage = 10;
 $totalRows = $tst->fetch(PDO::FETCH_NUM)[0];
 $totalPages = ceil($totalRows / $perPage);
-
 if ($page < 1) {
     header("Location:ingredient_datalist.php?page=1");
     $page = 1;
@@ -18,34 +20,41 @@ if ($page > $totalPages) {
     header("Location:ingredient_datalist.php?page={$totalPages}");
     $page = $totalPages;
 }
-
 $sequence = isset($_GET['sequence']) ? $_GET['sequence'] : "sid";
-// $sort = "ASC";
+$order = isset($_GET['order']) ? $_GET['order'] : "ASC";
 
 $sql = sprintf(
     "SELECT `ingredient`.* ,`on-sale`.* 
 FROM `ingredient` 
 JOIN `on-sale` 
 ON `ingredient`.`sale` = `on-sale`.`sale_sid` 
-ORDER BY `%s` %s 
+ORDER BY `%s` %s
 LIMIT %s,%s",
     $sequence,
-    "DESC",
+    $order,
     ($page - 1) * $perPage,
     $perPage
 );
-
 $stmt = $pdo->query($sql);
 $rows = $stmt->fetchAll();
 
 
-$sid = $_POST['checkForm'];
+if(!empty ($_GET['inputPassword2'])){
+    $search = $_GET['inputPassword2'];
+    $tst = $pdo->query("SELECT COUNT(*) FROM `ingredient` WHERE `ingredient`.`sid`= $search");
 
-$str = implode("','",$sid);
+    if($tst->rowCount()>0){
+        session_start();
+        $_SESSION['search'] = $search;
+        header('Location: ingredient_search.php');
+    }else{
+      exit;
+    }
+}
 
-$sql = "DELETE FROM `ingredient` WHERE `sid` in ('{$str}') ";
 
-$pdo->query($sql);
+$sql = "SELECT `ingredient`.`sid` FROM `ingredient`";
+
 
 ?>
 <?php
@@ -58,7 +67,6 @@ require __DIR__ . "/ingredient_navbar.php";
         width: 90%;
         margin: auto;
     }
-
     .form-group small {
         color: red;
     }
@@ -118,18 +126,18 @@ require __DIR__ . "/ingredient_navbar.php";
                     </li>
                 </ul>
             </nav>
-            <form class="form-inline" name="form_search" action="ingredient_search.php" method="get">
+            <form class="form-inline" name="form_search" action="" method="get">
                 <div class="form-group mx-sm-3 mb-2" style="margin:8px;">
                     <label for="inputPassword2" class="sr-only"></label>
                     <input type="text" class="form-control" id="inputPassword2" placeholder="請輸入商品編號" name="inputPassword2">
+
                 </div>
                 <button type="submit" class="btn btn-primary mb-2" style="margin:8px;"><i class="fas fa-search"></i> Search</button>
-                <a href="ingredient_search.php">按我</a>
             </form>
         </div>
     </nav>
 </div>
-<form action="" method="post" id="my-form">
+<form action="ingredient_<?=$i?>.php" method="post" id="my-form">
 <div style="margin-top:2rem;"></div>
 <div class="main-section">
     <table class="table table-hover table-dark">
@@ -139,12 +147,12 @@ require __DIR__ . "/ingredient_navbar.php";
                     <input type="checkbox">
                 </th>
                 <th scope="col">商品圖</th>
-                <th scope="col"><a href="?sequence=sid">商品品號</a></th>
+                <th scope="col">商品品號<a href="?sequence=sid&order=ASC">up</a><a href="?sequence=sid&order=DESC">down</a></th>
                 <th scope="col">食材名稱</th>
-                <th scope="col"><a href="?sequence=price">價格</a></th>
-                <th scope="col">數量</th>
+                <th scope="col">價格<a href="?sequence=price&order=ASC">up</a><a href="?sequence=price&order=DESC">down</a></th>
+                <th scope="col">數量<a href="?sequence=quantity&order=ASC">up</a><a href="?sequence=quantity&order=DESC">down</a></th>
                 <th scope="col">商品狀態</th>
-                <th scope="col"><a href="?sequence=create_at">新增時間</th>
+                <th scope="col">新增時間<a href="?sequence=create_at&order=ASC">up</a><a href="?sequence=create_at&order=DESC">down</a></th>
                 <th scope="col"><i class="fas fa-trash"></i></th>
                 <th scope="col"><i class="fas fa-book"></i></th>
             </tr>
@@ -172,7 +180,8 @@ require __DIR__ . "/ingredient_navbar.php";
             <?php endforeach; ?>
         </tbody>
     </table>
-    <button  type="submit" form="my-form" class="btn btn-outline-warning" style="width:100px;">批量刪除</button>
+    <button  type="submit" form="my-form" class="btn btn-outline-warning" style="width:100px;" onclick="multidelete()">批量刪除</button>
+    <button  type="submit" form="my-form" class="btn btn-outline-warning" style="width:100px;" onclick="onsale()">批量上架</button>
 </div>
 </form>
 
@@ -183,9 +192,6 @@ require __DIR__ . "/ingredient_navbar.php";
             location.href = 'ingredient_delete.php?sid=' + sid;
         }
     }
-</script>
-<script>
-
 </script>
 
 <?php

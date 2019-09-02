@@ -90,6 +90,6 @@ class __TwigTemplate_88b0488f1fb741a76fea30a11168be30d02e7c109cdd04a87b5e228bdc0
 
     public function getSourceContext()
     {
-        return new Source("", "radio_fields.twig", "C:\\xampp\\htdocs\\small-project\\phpMyAdmin-GC\\templates\\radio_fields.twig");
+        return new Source("", "radio_fields.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\radio_fields.twig");
     }
 }

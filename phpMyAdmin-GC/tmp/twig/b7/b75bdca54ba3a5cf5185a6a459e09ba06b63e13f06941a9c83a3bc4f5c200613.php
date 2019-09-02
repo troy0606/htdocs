@@ -104,6 +104,6 @@ class __TwigTemplate_90cd7fb177dc8eb1c389334f7e4d79839ad4442022a637faf342e7237c7
 
     public function getSourceContext()
     {
-        return new Source("", "dropdown.twig", "C:\\xampp\\htdocs\\small-project\\phpMyAdmin-GC\\templates\\dropdown.twig");
+        return new Source("", "dropdown.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\dropdown.twig");
     }
 }

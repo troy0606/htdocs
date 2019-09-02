@@ -91,6 +91,6 @@ class __TwigTemplate_198a7ed80194e1395256be01ebd8c82d59b77af13b6c98783d5c2cd03dd
 
     public function getSourceContext()
     {
-        return new Source("", "display/export/method.twig", "C:\\xampp\\phpMyAdmin\\templates\\display\\export\\method.twig");
+        return new Source("", "display/export/method.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\display\\export\\method.twig");
     }
 }

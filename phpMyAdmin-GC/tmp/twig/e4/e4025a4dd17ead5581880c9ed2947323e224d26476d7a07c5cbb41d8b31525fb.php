@@ -302,6 +302,6 @@ class __TwigTemplate_e4ddb12aa441091f51931f8fb0cfe70b83ce743402687e4620d67d61e6f
 
     public function getSourceContext()
     {
-        return new Source("", "display/import/javascript.twig", "C:\\xampp\\htdocs\\phpMyAdmin-self\\templates\\display\\import\\javascript.twig");
+        return new Source("", "display/import/javascript.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\display\\import\\javascript.twig");
     }
 }

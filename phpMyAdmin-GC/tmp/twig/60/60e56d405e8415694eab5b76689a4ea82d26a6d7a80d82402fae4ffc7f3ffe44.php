@@ -113,6 +113,6 @@ class __TwigTemplate_474bd8b1ad3a8164b64f180bdfac6517f3fd5117180a4a0d331bcf9d20d
 
     public function getSourceContext()
     {
-        return new Source("", "table/structure/action_row_in_structure_table.twig", "C:\\xampp\\htdocs\\phpMyAdmin-self\\templates\\table\\structure\\action_row_in_structure_table.twig");
+        return new Source("", "table/structure/action_row_in_structure_table.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\table\\structure\\action_row_in_structure_table.twig");
     }
 }

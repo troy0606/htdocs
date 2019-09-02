@@ -291,6 +291,6 @@ class __TwigTemplate_40508b09cfe3ca17bc5e3ee899704f406920bcbe2e572b508012fb85d65
 
     public function getSourceContext()
     {
-        return new Source("", "database/structure/body_for_table_summary.twig", "C:\\xampp\\phpMyAdmin\\templates\\database\\structure\\body_for_table_summary.twig");
+        return new Source("", "database/structure/body_for_table_summary.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\database\\structure\\body_for_table_summary.twig");
     }
 }

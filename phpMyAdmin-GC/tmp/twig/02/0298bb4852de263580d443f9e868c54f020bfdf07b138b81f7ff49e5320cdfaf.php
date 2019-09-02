@@ -132,6 +132,6 @@ class __TwigTemplate_0c8a3fae53e5ebab468bfd57f55df9d21de9ac1c1a3f9808556aeb90206
 
     public function getSourceContext()
     {
-        return new Source("", "list/item.twig", "C:\\xampp\\htdocs\\small-project\\phpMyAdmin-GC\\templates\\list\\item.twig");
+        return new Source("", "list/item.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\list\\item.twig");
     }
 }

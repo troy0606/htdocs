@@ -109,6 +109,6 @@ class __TwigTemplate_3e27e7e694cc6e3bfd90d0ce3ae13afa0a5cc3d873fc3c10fd326f88c28
 
     public function getSourceContext()
     {
-        return new Source("", "display/export/options_output_compression.twig", "C:\\xampp\\phpMyAdmin\\templates\\display\\export\\options_output_compression.twig");
+        return new Source("", "display/export/options_output_compression.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\display\\export\\options_output_compression.twig");
     }
 }

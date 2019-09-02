@@ -1,241 +1,124 @@
 <?php
+session_start();
+$page_name = 'datalist';
+$page_title = '全部商品列表';
 require __DIR__ . "/ingredient_connect.php";
-require __DIR__ . "/html_head_in.php";
-require __DIR__ . "/navbar_in.php";
 
-$inputPassword = isset($_GET['inputPassword2']) ? $_GET['inputPassword2'] : "沒資料";
-$sql = "SELECT * FROM `ingredient` WHERE `sid`=$inputPassword";
+// if(empty($_GET['inputPassword2'])){
+//     header("Location:".$_SERVER['HTTP_REFERER']);
+// }
+
+
+$search_result = $_SESSION['search'];
+$sql = "SELECT * FROM `ingredient` WHERE `ingredient`.`sid`= $search_result";
 $stmt = $pdo->query($sql);
 $row = $stmt->fetch();
 
-
-$sql = "SELECT * FROM `categories`";
+$sql =
+    "SELECT `ingredient`.* ,`on-sale`.* 
+FROM `ingredient` 
+JOIN `on-sale` 
+ON `ingredient`.`sale` = `on-sale`.`sale_sid`";
 $stmt = $pdo->query($sql);
-$rows2 = $stmt->fetchAll();
+$row2 = $stmt->fetch();
 
-$level1 = [];
+if(!empty ($_GET['inputPassword2'])){
+    $search = $_GET['inputPassword2'];
+    $tst = $pdo->query("SELECT COUNT(*) FROM `ingredient` WHERE `ingredient`.`sid`= $search");
 
-// 拿第一層
-foreach ($rows2 as $r) {
-    if ($r['parent_sid'] == 0) {
-        $level1[] = $r;
+    if($tst->rowCount()>0){
+        session_start();
+        $_SESSION['search'] = $search;
+        header('Location: ingredient_search.php');
+    }else{
+        exit;
     }
 }
 
-// 拿第二層
-foreach ($level1 as $k => $v) {
-    foreach ($rows2 as $r) {
-        if ($r['parent_sid'] == $v['cate_sid']) {
-            $level1[$k]['nodes'][] = $r;
-        }
-    }
-}
-
-$sql = "SELECT * FROM `tags` ";
-
-$stmt = $pdo->query($sql);
-$rows3 = $stmt->fetchAll();
-
-// $tag = empty($_POST['tag']) ? [] : $_POST['tag'];
-// $tag = [];
-// $k = 1;
-
-// print_r($rows3.LengthException);
-
-
-$tag = [
-    '1' => $rows3[0]['tag_name'],
-    '2' => $rows3[1]['tag_name'],
-    '3' => $rows3[2]['tag_name'],
-    '4' => $rows3[3]['tag_name'],
-    '5' => $rows3[4]['tag_name']
-];
-
-$sql = "SELECT * FROM `on-sale` ";
-$stmt = $pdo->query($sql);
-$sale_row = $stmt->fetchAll();
-
-
-// print_r($rows2[$row['minor_category'] - 1]['cate_name']);
-// print_r($rows2[$row['primary_category'] - 1]['cate_name']);
-
-$checkedTag = json_decode($row['tag'], true);
 ?>
-<div class="container">
-    <div class="row">
-        <div class="col-6">
-            <div class="alert alert-primary" role="alert" style="display:none" id="bar_info"></div>
-            <div class="card">
-                <div class="card-body">
-                    <h5 class=" card-title">搜尋結果</h5>
-                    <form name="form1" onsubmit="return check()" enctype="multipart/form-data">
-                        <input type="hidden" name="sid" value="<?= htmlentities($row['sid']) ?>">
-                        <!-- 資料送出時返回函式check的值 -->
-                        <div class="form-group">
-                            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                                <div class="carousel-inner">
-                                    <?php $v = json_decode($row['pic_name']) ?>
-                                    <?php $i = 0; ?>
-                                    <?php foreach ($v as $a) : ?>
-                                        <div class="carousel-item <?= $i == 0 ? "active" : " "; ?>  " data-interval="10000">
-                                            <img src="uploads/<?= $a; ?>" class="d-block w-100" alt="...">
-                                        </div>
-                                        <?php $i = $i + 1; ?>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                            <div class="form-group">商品圖片
-                                <img src="<?= 'uploads/' . $row['pic_name'] ?>" height="200" id="preview">
-                                <input type="file" class="form-control-file" id="pic_name" name="pic_name[]" onchange="previewFile()" style="display:none" value="<?= htmlentities($row['pic_name']) ?>" multiple><br>
-                            </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-info" onclick="selUpload()">選擇上傳的圖檔</button>
-                            </div>
-                            <small id="pic-nameHelp" class="form-text text-muted"></small>
-                        </div>
-                        <div class="form-group">
-                            <label for="product_name">商品名稱</label>
-                            <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Enter product_name" value="<?= htmlentities($row['product_name']) ?>">
-                            <small id="product_nameHelp" class="form-text text-muted"></small>
-                        </div>
-                        <div class="form-group">
-                            <label for="primary_category">大分類</label>
-                            <select class="form-control" id="primary_category" name="primary_category">
-                                <?php foreach ($level1 as $a1) : ?>
-                                    <option value="<?= $a1['cate_sid'] ?>" <?= $a1['cate_sid'] == $row['primary_category'] ? "selected" : "" ?>><?= $a1['cate_name'] ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="minor_category">小分類</label>
-                            <select class="form-control" id="minor_category" name="minor_category">
-                            </select>
-                        </div>
-                        <div class="form-group">標籤<br>
-                            <?php foreach ($tag as $k => $v) : ?>
-                                <?php $tag = empty($_POST['tag']) ? '[]' : $_POST['tag']; ?>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="tag[]" id="tag<?= $k ?>" value="<?= $k ?>" <?= htmlentities(in_array($k, $checkedTag)) ? 'checked' : '' ?>>
-                                    <label class="form-check-label" for="tag<?= $k ?>"><?= $v ?></label>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                        <div class="form-group">
-                            <label for="price">價格</label>
-                            <input type="text" class="form-control" id="price" name="price" placeholder="price" value="<?= htmlentities($row['price']) ?>">
-                            <small id="priceHelp" class="form-text text-muted"></small>
-                        </div>
-                        <div class="form-group">
-                            <label for="quantity">數量</label>
-                            <input type="text" class="form-control" id="quantity" name="quantity" placeholder="quantity" value="<?= htmlentities($row['quantity']) ?>">
-                            <small id="quantityHelp" class="form-text text-muted"></small>
-                        </div>
-                        <div class="form-group">
-                            <label for="sale">商品狀態</label>
-                            <select class="form-control" id="sale" name="sale">
-                                <?php foreach ($sale_row as $v) : ?>
-                                    <option value="<?= $v['sale_sid'] ?>" <?= $v['sale_sid'] == $row['sale'] ? "selected" : "" ?>><?= $v['on_sale_status'] ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="made_in">產地</label>
-                            <input type="text" class="form-control" id="made_in" name="made_in" placeholder="made_in" value="<?= htmlentities($row['made_in']) ?>">
-                            <small id="made_inHelp" class="form-text text-muted"></small>
-                        </div>
-                        <div class="form-group">
-                            <label for="weight">重量</label>
-                            <input type="text" class="form-control" id="weight" name="weight" placeholder="weight" value="<?= htmlentities($row['weight']) ?>">
-                            <small id="weightHelp" class="form-text text-muted"></small>
-                        </div>
-                        <div class="form-group">
-                            <label for="ingredient">成分</label>
-                            <input type="text" class="form-control" id="ingredient" name="ingredient" placeholder="ingredient" value="<?= htmlentities($row['ingredient']) ?>">
-                            <small id="ingredientHelp" class="form-text text-muted"></small>
-                        </div>
-                        <button type="submit" class="btn btn-primary">送出</button>
-                        <button class="alert"><a href="ingredient_datalist.php?">取消修改</a></button>
-                    </form>
+<?php
+require __DIR__ . "/html_head_in.php";
+require __DIR__ . "/navbar_in.php";
+require __DIR__ . "/ingredient_navbar.php";
+?>
+<style>
+    .main-section {
+        width: 90%;
+        margin: auto;
+    }
+
+    .form-group small {
+        color: red;
+    }
+</style>
+<div style="margin-top:2rem;">
+    <nav class="navbar navbar-expand-lg">
+        <div class="collapse navbar-collapse justify-content-between align-items-center" id="navbarSupportedContent">
+            <form class="form-inline" name="form_search" action="ingredient_search.php" method="get">
+                <div class="form-group mx-sm-3 mb-2" style="margin:8px;">
+                    <label for="inputPassword2" class="sr-only"></label>
+                    <input type="text" class="form-control" id="inputPassword2" placeholder="請輸入商品編號" name="inputPassword2">
                 </div>
-            </div>
+                <button type="submit" class="btn btn-primary mb-2" style="margin:8px;"><i class="fas fa-search"></i> Search</button>
+            </form>
         </div>
-        <script>
-            let bar_info = document.querySelector("#bar_info");
-
-            function check() {
-
-                let fd = new FormData(document.form1);
-
-                if (true) {
-                    fetch("ingredient_edit-api.php", {
-                            method: 'POST',
-                            body: fd
-                        })
-                        .then(response => {
-                            return response.json();
-                            console.log(response);
-                        })
-                        .then(jsonObj => {
-                            console.log(jsonObj);
-                            bar_info.style.display = "block";
-                            bar_info.innerHTML = jsonObj.info;
-                            if (jsonObj.success) {
-                                bar_info.className = "alert alert-success";
-                            } else {
-                                bar_info.className = "alert alert-danger";
-                            }
-                        })
-                }
-                return false;
-            }
-        </script>
-        <script>
-            function selUpload() {
-                document.querySelector('#pic_name').click();
-            }
-        </script>
-        <script>
-            function previewFile() {
-                var preview = document.querySelector('#preview');
-                var file = document.querySelector('input[type=file]').files[0];
-                var reader = new FileReader();
-
-                reader.addEventListener("load", function() {
-                    preview.src = reader.result;
-                }, false);
-
-                if (file) {
-                    reader.readAsDataURL(file);
-                }
-            }
-        </script>
-        <script>
-            let cate_data = <?= json_encode($level1, JSON_UNESCAPED_UNICODE) ?>;
-            let cate1 = document.querySelector('#primary_category');
-            let cate2 = document.querySelector('#minor_category');
-
-            let whenCate1Change = function() {
-                let cate1_id = cate1.value;
-                
-                let i, item, c2 = '';
-
-                for (i = 0; i < cate_data.length; i++) {
-                    item = cate_data[i];
-                    if (item.cate_sid == cate1_id) {
-                        item.nodes.forEach(function(i2) {
-                            c2 += `<option value="${i2.cate_sid}">${i2.cate_name}</option>`;
-                        });
-                        break;
-                    }
-                }
-                cate2.innerHTML = c2;
-            };
-            cate1.addEventListener('change', whenCate1Change);
-            whenCate1Change();
-        </script>
-    </div>
+    </nav>
+</div>
+<div style="margin-top:2rem;"></div>
+<div class="main-section">
+    <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+                <th>
+                    <input type="checkbox">
+                </th>
+                <th scope="col">商品圖</th>
+                <th scope="col"><a href="?sequence=sid">商品品號</a></th>
+                <th scope="col">食材名稱</th>
+                <th scope="col"><a href="?sequence=price">價格</a></th>
+                <th scope="col">數量</th>
+                <th scope="col">商品狀態</th>
+                <th scope="col"><a href="?sequence=create_at">新增時間</th>
+                <th scope="col"><i class="fas fa-trash"></i></th>
+                <th scope="col"><i class="fas fa-book"></i></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <input name="checkForm[]" type="checkbox" value="<?= htmlentities("{$row['sid']}") ?>">
+                </td>
+                <td><img src="<?= 'uploads/' . json_decode($row['pic_name'])[0] ?>" height='100px'></td>
+                <td><?= htmlentities("{$row['sid']}") ?></td>
+                <td><?= htmlentities("{$row['product_name']}") ?></td>
+                <td><?= htmlentities("{$row['price']}") ?></td>
+                <td><?= htmlentities("{$row['quantity']}") ?></td>
+                <td><?= htmlentities("{$row2['on_sale_status']}") ?></td>
+                <td><?= htmlentities("{$row['create_at']}") ?></td>
+                <td>
+                    <a href="javascript:delete2(<?= $row['sid'] ?>)">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+                <td><a href="ingredient_edit.php?sid=<?= $row['sid'] ?>"><i class="fas fa-book"></i></a></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 
+<script>
+    function delete2(sid) {
+        if (confirm(`確定要刪除編號為 ${sid} 的資料嗎?`)) {
+            location.href = 'ingredient_delete.php?sid=' + sid;
+        }
+    }
+</script>
+<script>
+</script>
 
-<?php require __DIR__ . "/footer_in.php"; ?>
+
+<?php
+
+require __DIR__ . "/footer_in.php";
+?>

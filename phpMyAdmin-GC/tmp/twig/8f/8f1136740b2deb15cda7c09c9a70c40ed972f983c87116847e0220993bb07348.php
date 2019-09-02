@@ -79,6 +79,6 @@ class __TwigTemplate_732896f3f27f9baa230aec24c3af6a64deb48ff16c87ccbb3836e824c0a
 
     public function getSourceContext()
     {
-        return new Source("", "export/alias_item.twig", "C:\\xampp\\phpMyAdmin\\templates\\export\\alias_item.twig");
+        return new Source("", "export/alias_item.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\export\\alias_item.twig");
     }
 }

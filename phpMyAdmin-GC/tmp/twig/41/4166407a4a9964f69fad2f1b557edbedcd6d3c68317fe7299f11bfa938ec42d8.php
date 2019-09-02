@@ -259,6 +259,6 @@ class __TwigTemplate_007ac2e92ff5471ea8b157069c47a0d798b8c60401a32282426cc08e54f
 
     public function getSourceContext()
     {
-        return new Source("", "database/structure/table_header.twig", "C:\\xampp\\phpMyAdmin\\templates\\database\\structure\\table_header.twig");
+        return new Source("", "database/structure/table_header.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\database\\structure\\table_header.twig");
     }
 }

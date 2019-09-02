@@ -26,8 +26,8 @@
 
             </ul>
             <ul class="navbar-nav">
-                <li  class="nav-item <?= $page_name == 'appliance_list_insert' ? 'active' : '' ?> ">
-                    <a class="nav-link" href="appliance_list_insert.php"><button type="button" class="btn btn-outline-warning" style="width:100px;">新增商品</button></a>
+                <li  class="nav-item <?= $page_name == 'ingredient_insertData' ? 'active' : '' ?> ">
+                    <a class="nav-link" href="ingredient_insertData.php"><button type="button" class="btn btn-outline-warning" style="width:100px;">新增商品</button></a>
                 </li>
             </ul>
     </div>

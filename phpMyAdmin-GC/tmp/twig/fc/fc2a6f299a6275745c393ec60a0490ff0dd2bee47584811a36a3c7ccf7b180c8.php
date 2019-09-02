@@ -51,6 +51,6 @@ class __TwigTemplate_fa35035a840e31b70d25db6e503c9fc037eabd80da74ac347c309fdd8f9
 
     public function getSourceContext()
     {
-        return new Source("", "config/form_display/form_bottom.twig", "C:\\xampp\\htdocs\\small-project\\phpMyAdmin-GC\\templates\\config\\form_display\\form_bottom.twig");
+        return new Source("", "config/form_display/form_bottom.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\config\\form_display\\form_bottom.twig");
     }
 }

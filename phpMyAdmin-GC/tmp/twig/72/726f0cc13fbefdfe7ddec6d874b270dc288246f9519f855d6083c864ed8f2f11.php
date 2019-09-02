@@ -231,6 +231,6 @@ class __TwigTemplate_661bee7d4c70ecbfbe0a7605da4da3a2e8ca17e90cb1bcdfa155f64cbfe
 
     public function getSourceContext()
     {
-        return new Source("", "table/structure/display_table_stats.twig", "C:\\xampp\\htdocs\\phpMyAdmin-self\\templates\\table\\structure\\display_table_stats.twig");
+        return new Source("", "table/structure/display_table_stats.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\table\\structure\\display_table_stats.twig");
     }
 }

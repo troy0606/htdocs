@@ -106,6 +106,6 @@ class __TwigTemplate_aedaa19187046bcee5fc1d10044a5b637c79a25587bb25022f6d31859eb
 
     public function getSourceContext()
     {
-        return new Source("", "list/unordered.twig", "C:\\xampp\\htdocs\\small-project\\phpMyAdmin-GC\\templates\\list\\unordered.twig");
+        return new Source("", "list/unordered.twig", "C:\\xampp\\htdocs\\htdocs\\phpMyAdmin-GC\\templates\\list\\unordered.twig");
     }
 }
