@@ -3,8 +3,9 @@ require __DIR__ . "/ingredient_connect.php";
 
 $result = [
     'success' => false,
-    'code' => 404,
-    'info' => "請輸入必要欄位"
+    'code' => 400,
+    'info' => "請輸入必要欄位",
+    'post' => $_POST
 ];
 
 if (empty($_POST['product_name']) or empty($_POST['price'])) {
@@ -24,7 +25,7 @@ $exts = [
     'image/jpeg' => '.jpg',
 ];
 
-$sid = intval($_POST['pic_name']);
+$sid = intval($_FILES['pic_name']);
 $sql = " SELECT * FROM `ingredient` WHERE `sid`=$sid ";
 $row = $pdo->query($sql)->fetch();
 $array_pic = $row['pic_name'];
@@ -94,10 +95,10 @@ $stmt->execute([
 if ($stmt->rowCount() == 1) {
     $result['success'] = true;
     $result['code'] = 200;
-    $result['info'] = '新增資料成功';
+    $result['info'] = '修改資料成功';
 } else {
     $result['code'] = 420;
-    $result['info'] = '新增資料失敗';
+    $result['info'] = '修改資料失敗';
     $result['error'] = $stmt;
 };
 echo json_encode($result, JSON_UNESCAPED_UNICODE);

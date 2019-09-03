@@ -28,7 +28,7 @@ $exts = [
 if (!empty($_FILES['pic_name'])) {
     foreach($_FILES['pic_name']['name'] as $k => $v){
         $new_filename = $_FILES['pic_name']['name'][$k];
-        $new_ext = $allowed_types[$_FILES['pic_name']['type'][$k]];
+        $new_ext = $exts[$_FILES['pic_name']['type'][$k]];
         move_uploaded_file($_FILES['pic_name']['tmp_name'][$k],$upload_dir.$new_filename.$new_ext);
         $pic_array[] = $new_filename.$new_ext;
     }
@@ -67,10 +67,10 @@ $stmt->execute([
         $_POST['quantity'],
         $_POST['made_in'],
         $_POST['weight'],
-        $_POST['ingredient'],
+        $_POST['ingredient']
 ]);
 
-if($stmt->rowCount()==1){
+if($stmt->rowCount()> 0){
     $result['success'] = true;
     $result['code'] = 200;
     $result['info'] = '新增成功';

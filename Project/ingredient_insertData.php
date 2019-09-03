@@ -107,7 +107,7 @@ $tag = [
                         <?php foreach ($tag as $k => $v) : ?>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" name="tag[]" id="tag<?= $k ?>" value="<?= $k ?>" <?= in_array($k, $tag) ? 'checked' : '' ?>>
-                                <label class="form-check-label" for="tag<?= $k ?>"><?= $v ?></label>
+                                <label class="form-check-label" for="tag<?= $k ?>"><span></span><?= $v ?></label>
                             </div>
                         <?php endforeach; ?>
                     </div>
@@ -142,31 +142,32 @@ $tag = [
         </div>
     </div>
     <script>
-        let bar_info = document.querySelector("#bar_info");
+        let info_bar = document.querySelector("#info_bar");
 
         function check() {
             let fd = new FormData(document.form1);
 
-            if (true) {
                 fetch("ingredient_insertData-api.php", {
                         method: 'POST',
                         body: fd
                     })
                     .then(response => {
+                        info_bar.innerHTML = "";
                         return response.json();
-                        console.log(response);
                     })
-                    .then(jsonObj => {
-                        console.log(jsonObj);
-                        bar_info.style.display = "block";
-                        bar_info.innerHTML = jsonObj.info;
-                        if (jsonObj.success) {
-                            bar_info.className = "alert alert-success";
+                    .then(json => {
+                        info_bar.style.display = "block";
+                        info_bar.innerHTML = json.info;
+                        console.log(1);
+                        if (json.success) {
+                            info_bar.className = "alert alert-success";
+                            setTimeout(function() {
+                                location.href = 'ingredient_datalist.php';
+                            }, 1000);
                         } else {
-                            bar_info.className = "alert alert-danger";
+                            info_bar.className = "alert alert-danger";
                         }
                     })
-            }
             return false;
         }
     </script>

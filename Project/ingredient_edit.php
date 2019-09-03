@@ -79,7 +79,7 @@ $checkedTag = json_decode($row['tag'], true);
     <div class="row">
         <div class="col-6">
             <div class="alert alert-primary" role="alert" style="display:none" id="bar_info"></div>
-            <div class="card">
+            <div class="card text-white bg-dark">
                 <div class="card-body">
                     <h5 class=" card-title">修改資料</h5>
                     <form name="form1" onsubmit="return check()" enctype="multipart/form-data">
@@ -100,7 +100,7 @@ $checkedTag = json_decode($row['tag'], true);
                             </div>
                             <div class="form-group">商品圖片
                                 <img src="<?= 'uploads/' . $row['pic_name'] ?>" height="200" id="preview">
-                                <input type="file" class="form-control-file" id="pic_name" name="pic_name[]" onchange="previewFile()" style="display:none" value="<?= htmlentities($row['pic_name']) ?>" multiple><br>
+                                <input type="file" class="form-control-file" id="pic_name" name="pic_name[]" onchange="previewFile()" style="display:none" multiple><br>
                             </div>
                             <div class="form-group">
                                 <button type="button" class="btn btn-info" onclick="selUpload()">選擇上傳的圖檔</button>
@@ -129,8 +129,8 @@ $checkedTag = json_decode($row['tag'], true);
                             <?php foreach ($tag as $k => $v) : ?>
                                 <?php $tag = empty($_POST['tag']) ? '[]' : $_POST['tag']; ?>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="tag[]" id="tag<?= $k ?>" value="<?= $k ?>" <?= htmlentities(in_array($k, $checkedTag)) ? 'checked' : '' ?>>
-                                    <label class="form-check-label" for="tag<?= $k ?>"><?= $v ?></label>
+                                    <input class="form-check-input checkbox" type="checkbox" name="tag[]" id="tag<?= $k ?>" value="<?= $k ?>" <?= htmlentities(in_array($k, $checkedTag)) ? 'checked' : '' ?>>
+                                    <label class="form-check-label" for="tag<?= $k ?>"><span></span><?= $v ?></label>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -168,7 +168,6 @@ $checkedTag = json_decode($row['tag'], true);
                             <small id="ingredientHelp" class="form-text text-muted"></small>
                         </div>
                         <button type="submit" class="btn btn-primary">送出</button>
-                        <button class="alert"><a href="ingredient_datalist.php?">取消修改</a></button>
                     </form>
                 </div>
             </div>
@@ -187,14 +186,15 @@ $checkedTag = json_decode($row['tag'], true);
                         })
                         .then(response => {
                             return response.json();
-                            console.log(response);
                         })
-                        .then(jsonObj => {
-                            console.log(jsonObj);
+                        .then(json => {
                             bar_info.style.display = "block";
-                            bar_info.innerHTML = jsonObj.info;
-                            if (jsonObj.success) {
+                            bar_info.innerHTML = json.info;
+                            if (json.success) {
                                 bar_info.className = "alert alert-success";
+                                setTimeout(function() {
+                                    location.href = 'ingredient_datalist.php';
+                                }, 1000);
                             } else {
                                 bar_info.className = "alert alert-danger";
                             }
@@ -230,7 +230,7 @@ $checkedTag = json_decode($row['tag'], true);
 
             let whenCate1Change = function() {
                 let cate1_id = cate1.value;
-                
+
                 let i, item, c2 = '';
 
                 for (i = 0; i < cate_data.length; i++) {
