@@ -1,5 +1,4 @@
 <?php
-session_start();
 $page_name = 'datalist';
 $page_title = '全部商品列表';
 require __DIR__ . "/ingredient_connect.php";
@@ -34,6 +33,14 @@ if(!empty ($_GET['inputPassword2'])){
         exit;
     }
 }
+
+$sql = "SELECT `ingredient`.* ,`on-sale`.* 
+FROM `ingredient` 
+JOIN `on-sale` 
+ON `ingredient`.`sale` = `on-sale`.`sale_sid`
+WHERE `ingredient`.`sid`= $search_result";
+$stmt = $pdo->query($sql);
+$row3 = $stmt->fetch();
 
 ?>
 <?php
@@ -107,7 +114,7 @@ require __DIR__ . "/ingredient_navbar.php";
                     <td><?= htmlentities("{$row['product_name']}") ?></td>
                     <td><?= htmlentities("{$row['quantity']}") ?></td>
                     <td><?= htmlentities("{$row['price']}") ?></td>
-                    <td><?= htmlentities("{$row['on_sale_status']}") ?></td>
+                    <td><?= htmlentities("{$row3['on_sale_status']}") ?></td>
                     <td><?= htmlentities("{$row['create_at']}") ?></td>
                     <td scope="col"><a href="javascript:delete_one(<?= $row['sid'] ?>)"><i class="fas fa-trash-alt" style="color:#fff; margin-right:20px;"></i></a>
                         <a href="appliance_list_edit.php?item_sid=<?= $row['sid'] ?>"><i class="fas fa-edit" style="color:#fff;"></i></a></td>
@@ -116,9 +123,9 @@ require __DIR__ . "/ingredient_navbar.php";
     </table>
 </form>
 <script>
-    function delete_one(item_sid) {
-        if (confirm(`確定要刪除編號為 ${item_sid} 的資料嗎?`)) {
-            location.href = 'appliance_list_delete.php?item_sid=' + item_sid;
+    function delete_one(sid) {
+        if (confirm(`確定要刪除編號為 ${sid} 的資料嗎?`)) {
+            location.href = 'appliance_delete.php?item_sid=' + sid;
         }
     }
 </script>

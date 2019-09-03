@@ -50,7 +50,6 @@ if(!empty ($_GET['inputPassword2'])){
     $tst = $pdo->query("SELECT COUNT(*) FROM `ingredient` WHERE `ingredient`.`sid`= $search");
 
     if($tst->rowCount()>0){
-        session_start();
         $_SESSION['search'] = $search;
         header('Location: ingredient_search.php');
     }else{
@@ -200,7 +199,7 @@ require __DIR__ . "/ingredient_navbar.php";
 <script>
     function delete_one(sid) {
         if (confirm(`確定要刪除編號為 ${sid} 的資料嗎?`)) {
-            location.href = 'ingredient_datalist.php?sid=' + sid;
+            location.href = 'ingredient_delete.php?sid='+sid;
         }
     }
 </script>
