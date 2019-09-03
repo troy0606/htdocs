@@ -24,13 +24,14 @@ $row2 = $stmt->fetch();
 if(!empty ($_GET['inputPassword2'])){
     $search = $_GET['inputPassword2'];
     $tst = $pdo->query("SELECT COUNT(*) FROM `ingredient` WHERE `ingredient`.`sid`= $search");
-
-    if($tst->rowCount()>0){
+    $tst = $tst ->fetch();
+    $tst = (intval($tst['COUNT(*)']));
+    if($tst>0){
         session_start();
         $_SESSION['search'] = $search;
         header('Location: ingredient_search.php');
     }else{
-        exit;
+        header('Location: ingredient_datalist.php');
     }
 }
 
@@ -45,7 +46,7 @@ $row3 = $stmt->fetch();
 ?>
 <?php
 require __DIR__ . "/html_head_in.php";
-require __DIR__ . "/navbar_in.php";
+require __DIR__ . "/ingredient_navbar_in.php";
 require __DIR__ . "/ingredient_navbar.php";
 ?>
 <style>

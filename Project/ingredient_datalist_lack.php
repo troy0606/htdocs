@@ -59,7 +59,7 @@ if (!empty($_GET['inputPassword2'])) {
 ?>
 <?php
 require __DIR__ . "/html_head_in.php";
-require __DIR__ . "/navbar_in.php";
+require __DIR__ . "/ingredient_navbar_in.php";
 require __DIR__ . "/ingredient_navbar.php";
 ?>
 <style>

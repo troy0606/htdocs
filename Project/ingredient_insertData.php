@@ -3,7 +3,7 @@ $page_name = 'ingredient_insertData';
 $page_title = 'ingredient_insertData';
 require __DIR__ . "/ingredient_connect.php";
 require __DIR__ . "/html_head_in.php";
-require __DIR__ . "/navbar_in.php";
+require __DIR__ . "/ingredient_navbar_in.php";
 $sql = "SELECT * FROM `ingredient` WHERE 1";
 $stmt = $pdo->query($sql);
 $rows = $stmt->fetchAll();
@@ -162,7 +162,7 @@ $tag = [
                         if (json.success) {
                             info_bar.className = "alert alert-success";
                             setTimeout(function() {
-                                location.href = 'ingredient_datalist.php';
+                                location.href = '/final/ingredient_datalist.php';
                             }, 1000);
                         } else {
                             info_bar.className = "alert alert-danger";

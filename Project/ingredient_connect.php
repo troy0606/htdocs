@@ -10,4 +10,7 @@ try {
 }
 error_log("PDO 連接資料庫成功");
 unset($userDir, $config);
+if(!isset($_SESSION)){
+    session_start();
+}
 ?>

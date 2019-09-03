@@ -3,7 +3,7 @@ $page_name = 'insertData';
 $page_title = '新增資料';
 require __DIR__ . "/ingredient_connect.php";
 require __DIR__ . "/html_head_in.php";
-require __DIR__ . "/navbar_in.php";
+require __DIR__ . "/ingredient_navbar_in.php";
 
 $sid = isset($_GET['sid']) ? intval($_GET['sid']) : 0;
 if (empty($_GET['sid'])) {
