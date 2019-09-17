@@ -87,9 +87,9 @@ require __DIR__ . "/ingredient_navbar.php";
             let i = 0;
             let thArray = pageVar.rows;
             thArray.forEach(function(a) {
-                console.log(typeof(a[1]));
-                let c = JSON.parse(a[1]);
-                console.log(c);
+                // console.log(typeof(a[1]));
+                // let c = JSON.parse(a[1]);
+                // console.log(c);
                 str += `<tr><td><input type="checkbox" id="check${i}" class="checkbox" name="checkOne[]" value="${a[0]}"><label for="check${i}"><span></span></label></td>
             <td>${a[0]}</td>
             <td>${a[2]}</td> 
@@ -108,6 +108,7 @@ require __DIR__ . "/ingredient_navbar.php";
 
     $("#tdContainer").on("click", ".del", function() {
         let delete_sid = $(this).attr("data-sid");
+        console.log(delete_sid);
         if (confirm(`確定要刪除編號為 ${delete_sid} 的資料嗎?`)) {
             $.ajax({
                 type: "POST",
