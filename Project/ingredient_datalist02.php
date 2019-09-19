@@ -77,20 +77,12 @@ require __DIR__ . "/ingredient_navbar.php";
     </table>
 </form>
 <script>
-    $.ajax({
-    // type: "POST",
-    url: "ingredient_datalist_api.php",
-    dataType: "json",
-    }).done(function(pageVar) {
-        let columnList = function() {
-            let str = "";
-            let i = 0;
-            let thArray = pageVar.rows;
-            thArray.forEach(function(a) {
-                // console.log(typeof(a[1]));
-                // let c = JSON.parse(a[1]);
-                // console.log(c);
-                str += `<tr><td><input type="checkbox" id="check${i}" class="checkbox" name="checkOne[]" value="${a[0]}"><label for="check${i}"><span></span></label></td>
+    let columnList = function(pageVar) {
+        let str = "";
+        let i = 0;
+        let thArray = pageVar.rows;
+        thArray.forEach(function(a) {
+            str += `<tr><td><input type="checkbox" id="check${i}" class="checkbox" name="checkOne[]" value="${a[0]}"><label for="check${i}"><span></span></label></td>
             <td>${a[0]}</td>
             <td>${a[2]}</td> 
                     <td>${a[7]}</td>
@@ -99,12 +91,68 @@ require __DIR__ . "/ingredient_navbar.php";
                     <td>${a[13]}</td>
                     <td scope="col" data-sid="${a[0]}" class="del"><a href=""><i class="fas fa-trash-alt" style="color:#fff; margin-right:20px;"></i></a>
                         <a href="ingredient_edit.php?sid=${a[0]}"><i class="fas fa-edit" style="color:#fff;"></i></a></td></tr>`;
-                i++;
-            })
-            $("#tdContainer").html(str);
-        }; 
-        columnList();
+            i++;
+        })
+        $("#tdContainer").html(str);
+    };
+
+    let page = function(pageVar) {
+        let page = pageVar.page;
+        let perPage = pageVar.perPage;
+        let totalPages = pageVar.totalPages;
+        let str = `<li class="page-item" data-page="${page-10}">
+                        <a class=" page-link">
+                            <i class="fas fa-angle-double-left" style="color: #15141A;"></i>
+                        </a>
+                    </li>
+                    <li class="page-item" data-page="${page-1}">
+                        <a class="page-link">
+                            <i class="fas fa-angle-left" style="color: #15141A;"></i>
+                        </a>
+                    </li>`;
+        for (i =1; i <= totalPages; i++) {
+            let a = i == page ? "active" : "";
+            str += ` <li class="page-item data-page="${i}" "${a}">
+                            <a class="page-link d-flex justify-content-center" style="width:55px; margin:0 auto; color: #15141A;">${i}</a>
+                        </li>`;
+        }
+        str += `<li class="page-item" data-page="${page+1}">
+                        <a class="page-link">
+                            <i class="fas fa-angle-right" style="color: #15141A;"></i>
+                        </a>
+                    </li>
+                    <li class="page-item" data-page="${page+10}">
+                        <a class="page-link">
+                            <i class="fas fa-angle-double-right" style="color: #15141A;"></i>
+                        </a>
+                    </li>`;
+        $("#pageContainer").html(str);
+    };
+    $.ajax({
+        // type: "POST",
+        url: "ingredient_datalist_api.php",
+        dataType: "json",
+    }).done(function(pageVar) {
+        columnList(pageVar);
+        page(pageVar);
     });
+
+    $("#pageContainer").on("click", "#pageContainer li", function(e) {
+        e.stopPropagation();
+        page = $(this).text();
+        $.ajax({
+            type: "POST",
+            url: "ingredient_datalist_api.php",
+            data: {
+                page: page,
+            },
+            dataType: "json"
+        }).done(function(pageVar) {
+            console.log(pageVar);
+            columnList(pageVar);
+            page(pageVar);
+        })
+    })
 
     $("#tdContainer").on("click", ".del", function() {
         let delete_sid = $(this).attr("data-sid");
@@ -116,13 +164,19 @@ require __DIR__ . "/ingredient_navbar.php";
                 data: {
                     sid: delete_sid,
                 },
-                // dataType: 'html',
             }).done(function(result) {
-                console.log(result);
                 if (result == "success") {
                     $(this).closest('tr').fadeOut(500);
                     alert(`${delete_sid} 成功刪除`);
-                }
+                };
+                $.ajax({
+                    url: "ingredient_datalist_api.php",
+                    dataType: "json",
+                }).done(function(pageVar) {
+                    columnList(pageVar);
+                    page(pageVar);
+                });
+
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 //失敗的時候
                 alert("有錯誤產生，請看 console log");
@@ -169,120 +223,6 @@ require __DIR__ . "/ingredient_navbar.php";
         form_submit.action = 'ingredient_allDelete_api.php';
         form_submit.submit();
     });
-</script>
-<script>
-    $('#t_content').on('click', '.del', function aa() {
-        console.log('aaaa')
-        var del_card = $(this).parents('tr');
-        console.log(del_card);
-        var c = confirm('要刪除嗎？');
-        c;
-        console.log($(this).attr("data-id"));
-        if (c == true) {
-            $.ajax({
-                type: "POST",
-                url: "space_delete.php",
-                data: {
-                    space_sid: $(this).attr("data-id"),
-                },
-                dataType: 'html'
-            }).done(function(data) {
-                console.log(data);
-                if (data == 'yes') {
-                    del_card.fadeOut(500);
-                    setTimeout(function() {
-                        alert('刪除成功');
-                    }, 700);
-                    setTimeout(() => {
-                        $.ajax({
-                                method: "post",
-                                url: "space_list_api.php",
-                                dataType: "json",
-                                data: {
-                                    page: page
-                                },
-                            })
-                            .done(function(v) {
-                                console.log(v.per_page);
-                                var array = v.rows;
-                                var a;
-                                var str = '';
-                                var city = array[0];
-                                console.log(array);
-                                console.log(array.length);
-                                for (a in array) {
-                                    str += "<tr> <th scope='col' class='del' data-id=" + array[a].space_sid + "><a  ><i class='fas fa-trash-alt'></i></a></th><td class='hidden-s'>" + array[a]['space_sid'] +
-                                        "</td><td>" + [a].name + "</td><td class='hidden-xs'>" + [a].details + "</td><td class='hidden-xs'>" + [a].wprice +
-                                        "</td><td class='hidden-xs'>" + [a].dprice + "</td><td class='hidden-xs'>" + [a].class +
-                                        "</td> <th scope='col'><i class='fas fa-edit'></i></th>";
-                                }
-                                $("#t_content").html(str);
-                                var page = v.page
-                                var totalPages = v.totalPages
-                                console.log(totalPages);
-                                var page_i = 1;
-                                var nav = "";
-                                if (totalPages < 5) {
-                                    p_start = 1;
-                                    p_end = totalPages;
-                                } else if (page - 2 < 1) {
-                                    p_start = 1;
-                                    p_end = 5;
-                                } else if (page + 2 > totalPages) {
-                                    p_start = totalPages - 4;
-                                    p_end = totalPages;
-                                } else {
-                                    p_start = page - 2;
-                                    p_end = page + 2;
-                                }
-                                for (page_i = p_start; page_i <= p_end; page_i++) {
-                                    let active = page_i === page ? 'active' : '';
-                                    nav += `
-                    
-                    <li class="page-item ${active}"><a class="page-link " style="color: #15141A;">${page_i}</a></li>
-                    
-                    `;
-                                }
-                                $("#navPage").html(nav);
-                                $('#navPage li a').click(function() {
-                                    var page = $(this).text();
-                                    $.ajax({
-                                            method: "post",
-                                            url: "space_list_api.php",
-                                            dataType: "json",
-                                            data: {
-                                                page: page
-                                            },
-                                        })
-                                        .done(function(v) {
-                                            // var v = JSON.parse(v);
-                                            console.log(v.per_page);
-                                            var array = v.rows;
-                                            var a;
-                                            var str = '';
-                                            var city = array[0];
-                                            console.log(array);
-                                            console.log(array.length);
-                                            for (a in array) {
-                                                str += "<tr> <th scope='col' class='del' data-id=" + array[a].space_sid + "><a  ><i class='fas fa-trash-alt'></i></a></th><td class='hidden-s'>" + array[a]['space_sid'] +
-                                                    "</td><td>" + [a].name + "</td><td class='hidden-xs'>" + [a].details + "</td><td class='hidden-xs'>" + [a].wprice +
-                                                    "</td><td class='hidden-xs'>" + [a].dprice + "</td><td class='hidden-xs'>" + [a].class +
-                                                    "</td> <th scope='col'><i class='fas fa-edit'></i></th>";
-                                            }
-                                            $("#t_content").html(str);
-                                        });
-                                });
-                            });
-                    }, 1000);
-                }
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                //失敗的時候
-                alert("有錯誤產生，請看 console log");
-                console.log(jqXHR.responseText);
-            });
-        }
-        return false;
-    })
 </script>
 <?php
 require __DIR__ . "/footer_in.php";
