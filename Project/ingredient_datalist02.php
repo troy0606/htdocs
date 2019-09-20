@@ -56,17 +56,17 @@ require __DIR__ . "/ingredient_navbar.php";
                 <th scope="col">品號</th>
                 <th scope="col">名稱</th>
                 <th scope="col">數量
-                    <!-- <a href="?ingredient_column=quantity&ingredient_up_down=ASC"><i class="fas fa-long-arrow-alt-up"></i></a>
-                    <a href="?ingredient_column=quantity&ingredient_up_down=DESC"><i class="fas fa-long-arrow-alt-down"></i></a> -->
+                    <a href="#" data-order="quantity-up"><i class="fas fa-long-arrow-alt-up"></i></a>
+                    <a href="#" data-order="quantity-down"><i class="fas fa-long-arrow-alt-down"></i></a>
                 </th>
                 <th scope="col">價格
-                    <!-- <a href="?ingredient_column=price&ingredient_up_down=ASC"><i class="fas fa-long-arrow-alt-up"></i></a>
-                    <a href="?ingredient_column=price&ingredient_up_down=DESC"><i class="fas fa-long-arrow-alt-down"></i></a> -->
+                    <a href="#" data-order="price-up"><i class="fas fa-long-arrow-alt-up"></i></a>
+                    <a href="#" data-order="price-down"><i class="fas fa-long-arrow-alt-down"></i></a>
                 </th>
                 <th scope="col">狀態</th>
                 <th scope="col">新增時間
-                    <!-- <a href="?ingredient_column=create_at&ingredient_up_down=ASC"><i class="fas fa-long-arrow-alt-up"></i></a>
-                    <a href="?ingredient_column=create_at&ingredient_up_down=DESC"><i class="fas fa-long-arrow-alt-down"></i></a> -->
+                    <a href="#" data-order="create-up"><i class="fas fa-long-arrow-alt-up"></i></a>
+                    <a href="#" data-order="create-down"><i class="fas fa-long-arrow-alt-down"></i></a>
                 </th>
                 <th scope="col">功能列表</th>
             </tr>
@@ -170,6 +170,7 @@ require __DIR__ . "/ingredient_navbar.php";
                 },
                 dataType: "json"
             }).done(function(pageVar) {
+                console.log(pageVar);
                 columnList(pageVar);
                 pageChange(pageVar);
                 lastPage = pageVar.page;
@@ -180,9 +181,9 @@ require __DIR__ . "/ingredient_navbar.php";
 
     });
 
-    $("#tdContainer").on("click", ".del", function() {
+    $("#tdContainer").on("click", ".del", function(e) {
+        e.stopPropagation();
         let delete_sid = $(this).attr("data-sid");
-        console.log(delete_sid);
         if (confirm(`確定要刪除編號為 ${delete_sid} 的資料嗎?`)) {
             $.ajax({
                 type: "POST",
@@ -215,13 +216,6 @@ require __DIR__ . "/ingredient_navbar.php";
     $("#form_search").click(function(e) {
         e.preventDefault();
         let search = $("#product_num").val();
-        // $.post('ingredient_search_api.php',{search:search},function(data){
-        //     if(data){
-        //         alert("Hi");
-        //         $("#tdContainer").remove();
-        //     }else{
-        //         alert("No result");
-        //     }
         $.ajax({
             type: "post",
             url: 'ingredient_search_api.php',
@@ -245,6 +239,19 @@ require __DIR__ . "/ingredient_navbar.php";
                 alert("沒有搜尋結果");
             }
         })
+    })
+
+    $("#all_form a").click(function() {
+        let order = $(this).data("order");
+        $.post("data_order.php", {
+            order: order
+        }, function(pageVar) {
+            console.log(pageVar);
+            $("#tdContainer").empty();
+            columnList(pageVar);
+            pageChange(pageVar);
+            lastPage = pageVar.page;
+        },'json')
     })
 </script>
 
