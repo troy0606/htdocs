@@ -77,6 +77,7 @@ require __DIR__ . "/ingredient_navbar.php";
     </table>
 </form>
 <script>
+    let lastPage;
     let columnList = function(pageVar) {
         let str = "";
         let i = 0;
@@ -96,63 +97,86 @@ require __DIR__ . "/ingredient_navbar.php";
         $("#tdContainer").html(str);
     };
 
-    let page = function(pageVar) {
+    let pageChange = function(pageVar) {
         let page = pageVar.page;
         let perPage = pageVar.perPage;
         let totalPages = pageVar.totalPages;
-        let str = `<li class="page-item" data-page="${page-10}">
+        let str = `<li class="page-item" id="previousAll">
                         <a class=" page-link">
                             <i class="fas fa-angle-double-left" style="color: #15141A;"></i>
                         </a>
                     </li>
-                    <li class="page-item" data-page="${page-1}">
+                    <li class="page-item" id="previous">
                         <a class="page-link">
                             <i class="fas fa-angle-left" style="color: #15141A;"></i>
                         </a>
                     </li>`;
-        for (i =1; i <= totalPages; i++) {
+        for (i = 1; i <= totalPages; i++) {
             let a = i == page ? "active" : "";
             str += ` <li class="page-item data-page="${i}" "${a}">
                             <a class="page-link d-flex justify-content-center" style="width:55px; margin:0 auto; color: #15141A;">${i}</a>
                         </li>`;
         }
-        str += `<li class="page-item" data-page="${page+1}">
+        str += `<li class="page-item" id="next">
                         <a class="page-link">
                             <i class="fas fa-angle-right" style="color: #15141A;"></i>
                         </a>
                     </li>
-                    <li class="page-item" data-page="${page+10}">
+                    <li class="page-item" id="nextAll">
                         <a class="page-link">
                             <i class="fas fa-angle-double-right" style="color: #15141A;"></i>
                         </a>
                     </li>`;
         $("#pageContainer").html(str);
     };
+
+    let pageOption;
     $.ajax({
         // type: "POST",
         url: "ingredient_datalist_api.php",
         dataType: "json",
     }).done(function(pageVar) {
         columnList(pageVar);
-        page(pageVar);
-    });
-
-    $("#pageContainer").on("click", "#pageContainer li", function(e) {
-        e.stopPropagation();
-        page = $(this).text();
-        $.ajax({
-            type: "POST",
-            url: "ingredient_datalist_api.php",
-            data: {
-                page: page,
-            },
-            dataType: "json"
-        }).done(function(pageVar) {
-            console.log(pageVar);
-            columnList(pageVar);
-            page(pageVar);
+        pageChange(pageVar);
+        totalPages = pageVar.totalPages;
+        $("#pageContainer").on("click", "#pageContainer li", function(e) {
+            pageOption = {
+                previous: (lastPage) => {
+                    return page = lastPage - 1 ? lastPage - 1 : 1;
+                },
+                previousAll: (lastPage) => {
+                    return page = (lastPage - 3) ? lastPage - 1 : 1;
+                },
+                next: (lastPage) => {
+                    return page = lastPage + 1 ? totalPages : lastPage + 1;
+                },
+                nextAll: (lastPage) => {
+                    return page = lastPage + 3 ? totalPages : lastPage + 3;
+                }
+            }
+            e.stopPropagation();
+            pageId = $(this).attr("id");
+            if (pageId) {
+                pageOption[pageId](page);
+                console.log(page);
+            } else {
+                page = $(this).text();
+            }
+            $.ajax({
+                type: "POST",
+                url: "ingredient_datalist_api.php",
+                data: {
+                    page: page,
+                },
+                dataType: "json"
+            }).done(function(pageVar) {
+                columnList(pageVar);
+                pageChange(pageVar);
+                lastPage = pageVar.page;
+            })
         })
-    })
+
+    });
 
     $("#tdContainer").on("click", ".del", function() {
         let delete_sid = $(this).attr("data-sid");
@@ -174,7 +198,7 @@ require __DIR__ . "/ingredient_navbar.php";
                     dataType: "json",
                 }).done(function(pageVar) {
                     columnList(pageVar);
-                    page(pageVar);
+                    pageChange(pageVar);
                 });
 
             }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -186,13 +210,6 @@ require __DIR__ . "/ingredient_navbar.php";
         return false;
     })
 </script>
-<!-- <script>
-    function delete_one(sid) {
-        if (confirm(`確定要刪除編號為 ${sid} 的資料嗎?`)) {
-            location.href = 'ingredient_delete.php?sid=' + sid;
-        }
-    }
-</script> -->
 
 <!-- 全選 checkbox start -->
 
