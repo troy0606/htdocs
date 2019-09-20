@@ -33,13 +33,12 @@ require __DIR__ . "/ingredient_navbar.php";
 
                 </ul>
             </nav>
-            <form class="form-inline" name="form_search" action="" method="get">
+            <form class="form-inline">
                 <div class="form-group mx-sm-3 mb-2" style="margin:8px;">
-                    <label for="inputPassword2" class="sr-only"></label>
-                    <input type="text" class="form-control" id="inputPassword2" placeholder="請輸入商品編號" name="inputPassword2">
-
+                    <label for="search" class="sr-only"></label>
+                    <input type="text" class="form-control" placeholder="請輸入商品編號" id="product_num">
                 </div>
-                <button type="submit" class="btn btn-outline-warning mb-2" style="margin:8px;"><i class="fas fa-search"></i> Search</button>
+                <button id="form_search" type="submit" class="btn btn-outline-warning mb-2" style="margin:8px;"><i class="fas fa-search"></i> Search</button>
             </form>
         </div>
     </nav>
@@ -139,20 +138,21 @@ require __DIR__ . "/ingredient_navbar.php";
         columnList(pageVar);
         pageChange(pageVar);
         totalPages = pageVar.totalPages;
-        console.log("page1:"+ lastPage);
+        console.log("page1:" + lastPage);
         $("#pageContainer").on("click", "#pageContainer li", function(e) {
+            lastPage = pageVar.page;
             pageOption = {
                 previous: (lastPage) => {
-                    return page = lastPage-1? lastPage-1 : 1;
+                    return page = lastPage - 1 ? lastPage - 1 : 1;
                 },
                 previousAll: (lastPage) => {
-                    return page = (lastPage-3) ?lastPage-1 : 1;
+                    return page = (lastPage - 3) ? lastPage - 3 : 1;
                 },
                 next: (lastPage) => {
-                    return page = (lastPage<totalPages)?lastPage + 1 : totalPages;
+                    return page = (lastPage < totalPages) ? lastPage + 1 : totalPages;
                 },
                 nextAll: (lastPage) => {
-                    return page = (lastPage>=totalPages)? totalPages : lastPage + 3;
+                    return page = (lastPage >= totalPages) ? totalPages : lastPage + 3;
                 }
             }
             e.stopPropagation();
@@ -173,7 +173,8 @@ require __DIR__ . "/ingredient_navbar.php";
                 columnList(pageVar);
                 pageChange(pageVar);
                 lastPage = pageVar.page;
-                console.log("page2:"+lastPage);
+                totalPages = pageVar.totalPages;
+                console.log("page2:" + lastPage);
             })
         })
 
@@ -209,6 +210,41 @@ require __DIR__ . "/ingredient_navbar.php";
             });
         }
         return false;
+    })
+
+    $("#form_search").click(function(e) {
+        e.preventDefault();
+        let search = $("#product_num").val();
+        // $.post('ingredient_search_api.php',{search:search},function(data){
+        //     if(data){
+        //         alert("Hi");
+        //         $("#tdContainer").remove();
+        //     }else{
+        //         alert("No result");
+        //     }
+        $.ajax({
+            type: "post",
+            url: 'ingredient_search_api.php',
+            data: {
+                search: search
+            },
+            dataType: 'json',
+        }).done(function(data) {
+            if (data) {
+                $("#tdContainer").empty();
+                $("#tdContainer").append(`<tr><td><input type="checkbox" id="check1" class="checkbox" name="checkOne[]" value="${data[0]}"><label for="check1"><span></span></label></td>
+            <td>${data[0]}</td>
+            <td>${data[2]}</td> 
+                    <td>${data[7]}</td>
+                    <td>${data[6]}</td>
+                    <td>${data[12]}</td>
+                    <td>${data[13]}</td>
+                    <td scope="col" data-sid="${data[0]}" class="del"><a href=""><i class="fas fa-trash-alt" style="color:#fff; margin-right:20px;"></i></a>
+                        <a href="ingredient_edit.php?sid=${data[0]}"><i class="fas fa-edit" style="color:#fff;"></i></a></td></tr>`);
+            } else {
+                alert("沒有搜尋結果");
+            }
+        })
     })
 </script>
 
