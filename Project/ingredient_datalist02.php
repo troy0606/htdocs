@@ -139,26 +139,26 @@ require __DIR__ . "/ingredient_navbar.php";
         columnList(pageVar);
         pageChange(pageVar);
         totalPages = pageVar.totalPages;
+        console.log("page1:"+ lastPage);
         $("#pageContainer").on("click", "#pageContainer li", function(e) {
             pageOption = {
                 previous: (lastPage) => {
-                    return page = lastPage - 1 ? lastPage - 1 : 1;
+                    return page = lastPage-1? lastPage-1 : 1;
                 },
                 previousAll: (lastPage) => {
-                    return page = (lastPage - 3) ? lastPage - 1 : 1;
+                    return page = (lastPage-3) ?lastPage-1 : 1;
                 },
                 next: (lastPage) => {
-                    return page = lastPage + 1 ? totalPages : lastPage + 1;
+                    return page = (lastPage<totalPages)?lastPage + 1 : totalPages;
                 },
                 nextAll: (lastPage) => {
-                    return page = lastPage + 3 ? totalPages : lastPage + 3;
+                    return page = (lastPage>=totalPages)? totalPages : lastPage + 3;
                 }
             }
             e.stopPropagation();
             pageId = $(this).attr("id");
             if (pageId) {
                 pageOption[pageId](page);
-                console.log(page);
             } else {
                 page = $(this).text();
             }
@@ -173,6 +173,7 @@ require __DIR__ . "/ingredient_navbar.php";
                 columnList(pageVar);
                 pageChange(pageVar);
                 lastPage = pageVar.page;
+                console.log("page2:"+lastPage);
             })
         })
 
