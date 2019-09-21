@@ -44,7 +44,7 @@ require __DIR__ . "/ingredient_navbar.php";
 </div>
 <div style="margin-top:2rem;"></div>
 
-<!-- <h6 style="color: #fff;">資料總筆數：<?= $totalRows ?></h6> -->
+<h6 id="totalCount" style="color: #fff;">資料總筆數：<?= $totalRows ?></h6>
 
 <form method="post" id="all_form" enctype="application/x-www-form-urlencoded">
     <table class="table table-hover table-dark" style="box-shadow: 0px 0px 80px #000000;">
@@ -92,6 +92,7 @@ require __DIR__ . "/ingredient_navbar.php";
             i++;
         })
         $("#tdContainer").html(str);
+        $("#totalCount").text(`資料總比數: ${pageVar.totalRows}`);
     };
 
     // ----product list end---------------
@@ -131,22 +132,33 @@ require __DIR__ . "/ingredient_navbar.php";
                     </li>`;
         $("#pageContainer").html(str);
     };
-    let pageOption;
-    let status;
+
     // ----product page end---------------
-
-
+    let status;
+    let order;
+    let page;
     // ----product page previous next---------------
+    let pageOption;
     let pageContent = function() {
         $.ajax({
             type: "post",
             url: "ingredient_datalist_api.php",
+            data: {
+                status: status,
+                order: order,
+                page: page,
+            },
             dataType: "json",
         }).done(function(pageVar) {
             columnList(pageVar);
             pageChange(pageVar);
             totalPages = pageVar.totalPages;
+            // status = pageVar.condition;
+            order = pageVar.order;
+            // console.log(order);
+            // page = pageVar.page;
             $("#pageContainer").on("click", "#pageContainer li", function(e) {
+                console.log(order);
                 lastPage = pageVar.page;
                 pageOption = {
                     previous: (lastPage) => {
@@ -173,6 +185,7 @@ require __DIR__ . "/ingredient_navbar.php";
                     type: "POST",
                     url: "ingredient_datalist_api.php",
                     data: {
+                        status: status,
                         order: order,
                         page: page,
                     },
@@ -184,15 +197,39 @@ require __DIR__ . "/ingredient_navbar.php";
                     totalPages = pageVar.totalPages;
                 })
             })
-
+            $("#all_form a").click(function() {
+                order = $(this).data("order");
+                $.post("ingredient_datalist_api.php", {
+                    status: status,
+                    order: order,
+                    page: page
+                }, function(pageVar) {
+                    // $("#tdContainer").empty();
+                    columnList(pageVar);
+                    pageChange(pageVar);
+                }, 'json')
+            });
         });
     }
+    pageContent();
 
-    $(document).ready(function() {
-        console.log(123);
-    });
     // ----product page previous next end---------------
 
+
+    // ----product order---------------
+    // $("#all_form a").click(function() {
+    //     order = $(this).data("order");
+    //     $.post("ingredient_datalist_api.php", {
+    //         order: order
+    //     }, function(pageVar) {
+    //         // $("#tdContainer").empty();
+    //         columnList(pageVar);
+    //         pageChange(pageVar);
+    //     }, 'json')
+    // });
+    // ----product order end---------------
+
+    // ----product status---------------
     $("#navbarSupportedContent").find("a").click(function() {
         status = $(this).data("status");
         // $("#tdContainer").empty();
@@ -204,11 +241,11 @@ require __DIR__ . "/ingredient_navbar.php";
             },
             dataType: "json",
         }).done(function(pageVar) {
-            data = pageVar.condition;
-            console.log(data);
-            pageContent(pageVar);
+            columnList(pageVar);
+            pageChange(pageVar);
         })
     })
+    // ----product status end---------------
 
     // ----product delete---------------
     $("#tdContainer").on("click", ".del", function(e) {
@@ -276,23 +313,6 @@ require __DIR__ . "/ingredient_navbar.php";
     })
 
     // ----product search end---------------
-
-    let order;
-    // ----product order end---------------
-    $("#all_form a").click(function() {
-        order = $(this).data("order");
-        $.post("data_order.php", {
-            order: order
-        }, function(pageVar) {
-            $("#tdContainer").empty();
-            columnList(pageVar);
-            pageChange(pageVar);
-
-        }, 'json')
-    });
-
-
-    // ----product order end---------------
 </script>
 
 <!-- 全選 checkbox start -->

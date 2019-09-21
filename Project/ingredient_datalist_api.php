@@ -53,23 +53,12 @@ switch($status){
     break;
 }
 
-switch($status){
-    case ''
-}
-
 $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
 // $totalPage = $totalRows / $perPage;
 $tst = $pdo->query("SELECT COUNT(*) FROM `ingredient` WHERE $condition");
 $perPage = 10;
 $totalRows = $tst->fetch(PDO::FETCH_NUM)[0];
 $totalPages = ceil($totalRows / $perPage);
-
-// $params = [];
-
-// $ingredient_column = isset($_POST['ingredient_column']) ? $_POST['ingredient_column'] : "sid";
-// $ingredient_up_down = isset($_POST['ingredient_up_down']) ? $_POST['ingredient_up_down'] : "ASC";
-// $params['ingredient_column'] = $ingredient_column;
-// $params['ingredient_up_down'] = $ingredient_up_down;
 
 
 
@@ -91,9 +80,8 @@ LIMIT %s,%s",
 $stmt = $pdo->query($sql);
 $rows = $stmt->fetchAll();
 
-
-
 $result = [
+    'order' => $order,
     'condition' => $condition,
     'page' => $page,
     'perPage' => $perPage, 
