@@ -76,7 +76,9 @@ require __DIR__ . "/ingredient_navbar.php";
     </table>
 </form>
 <script>
-    let lastPage;
+
+    
+// ----loading product list---------------
     let columnList = function(pageVar) {
         let str = "";
         let i = 0;
@@ -96,6 +98,11 @@ require __DIR__ . "/ingredient_navbar.php";
         $("#tdContainer").html(str);
     };
 
+// ----product list end---------------
+
+// ----loading product page---------------
+
+let lastPage;
     let pageChange = function(pageVar) {
         let page = pageVar.page;
         let perPage = pageVar.perPage;
@@ -128,7 +135,9 @@ require __DIR__ . "/ingredient_navbar.php";
                     </li>`;
         $("#pageContainer").html(str);
     };
+// ----product page end---------------
 
+// ----product page previous next---------------
     let pageOption;
     $.ajax({
         // type: "POST",
@@ -181,6 +190,10 @@ require __DIR__ . "/ingredient_navbar.php";
 
     });
 
+    // ----product page previous next end---------------
+
+
+     // ----product delete---------------
     $("#tdContainer").on("click", ".del", function(e) {
         e.stopPropagation();
         let delete_sid = $(this).attr("data-sid");
@@ -213,6 +226,10 @@ require __DIR__ . "/ingredient_navbar.php";
         return false;
     })
 
+    // ----product delete end---------------
+
+
+    // ----product search---------------
     $("#form_search").click(function(e) {
         e.preventDefault();
         let search = $("#product_num").val();
@@ -241,6 +258,9 @@ require __DIR__ . "/ingredient_navbar.php";
         })
     })
 
+    // ----product search end---------------
+
+    // ----product order---------------
     $("#all_form a").click(function() {
         let order = $(this).data("order");
         $.post("data_order.php", {
@@ -253,6 +273,7 @@ require __DIR__ . "/ingredient_navbar.php";
             lastPage = pageVar.page;
         },'json')
     })
+    // ----product order end---------------
 </script>
 
 <!-- 全選 checkbox start -->
