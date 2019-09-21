@@ -13,7 +13,6 @@ require __DIR__ . "/ingredient_navbar.php";
         width: 90%;
         margin: auto;
     }
-
     .form-group small {
         color: red;
     }
@@ -30,7 +29,6 @@ require __DIR__ . "/ingredient_navbar.php";
             </nav>
             <nav aria-label="Page navigation example" style="color: #15141A;">
                 <ul class="pagination" style="margin:0;" id="pageContainer">
-
                 </ul>
             </nav>
             <form class="form-inline">
@@ -43,7 +41,6 @@ require __DIR__ . "/ingredient_navbar.php";
         </div>
     </nav>
 </div>
-
 <div style="margin-top:2rem;"></div>
 
 <!-- <h6 style="color: #fff;">資料總筆數：<?= $totalRows ?></h6> -->
@@ -76,9 +73,7 @@ require __DIR__ . "/ingredient_navbar.php";
     </table>
 </form>
 <script>
-
-    
-// ----loading product list---------------
+    // ----loading product list---------------
     let columnList = function(pageVar) {
         let str = "";
         let i = 0;
@@ -98,11 +93,11 @@ require __DIR__ . "/ingredient_navbar.php";
         $("#tdContainer").html(str);
     };
 
-// ----product list end---------------
+    // ----product list end---------------
 
-// ----loading product page---------------
+    // ----loading product page---------------
 
-let lastPage;
+    let lastPage;
     let pageChange = function(pageVar) {
         let page = pageVar.page;
         let perPage = pageVar.perPage;
@@ -135,9 +130,9 @@ let lastPage;
                     </li>`;
         $("#pageContainer").html(str);
     };
-// ----product page end---------------
+    // ----product page end---------------
 
-// ----product page previous next---------------
+    // ----product page previous next---------------
     let pageOption;
     $.ajax({
         // type: "POST",
@@ -147,7 +142,6 @@ let lastPage;
         columnList(pageVar);
         pageChange(pageVar);
         totalPages = pageVar.totalPages;
-        console.log("page1:" + lastPage);
         $("#pageContainer").on("click", "#pageContainer li", function(e) {
             lastPage = pageVar.page;
             pageOption = {
@@ -175,16 +169,15 @@ let lastPage;
                 type: "POST",
                 url: "ingredient_datalist_api.php",
                 data: {
+                    order:order,
                     page: page,
                 },
                 dataType: "json"
             }).done(function(pageVar) {
-                console.log(pageVar);
                 columnList(pageVar);
                 pageChange(pageVar);
                 lastPage = pageVar.page;
                 totalPages = pageVar.totalPages;
-                console.log("page2:" + lastPage);
             })
         })
 
@@ -193,7 +186,7 @@ let lastPage;
     // ----product page previous next end---------------
 
 
-     // ----product delete---------------
+    // ----product delete---------------
     $("#tdContainer").on("click", ".del", function(e) {
         e.stopPropagation();
         let delete_sid = $(this).attr("data-sid");
@@ -260,19 +253,21 @@ let lastPage;
 
     // ----product search end---------------
 
-    // ----product order---------------
+    let order;
+    // ----product order end---------------
     $("#all_form a").click(function() {
-        let order = $(this).data("order");
+        order = $(this).data("order");
         $.post("data_order.php", {
             order: order
         }, function(pageVar) {
-            console.log(pageVar);
             $("#tdContainer").empty();
             columnList(pageVar);
             pageChange(pageVar);
-            lastPage = pageVar.page;
-        },'json')
-    })
+
+            }, 'json')
+        });
+
+
     // ----product order end---------------
 </script>
 

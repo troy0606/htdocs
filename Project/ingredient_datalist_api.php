@@ -1,26 +1,52 @@
 <?php
 require __DIR__ . "/ingredient_connect.php";
+$order = isset($_POST['order'])?$_POST['order']:'create-down';
+
+$ingredient_column;
+$ingredient_up_down;
+
+switch($order){
+    case 'quantity-up':
+    $ingredient_column = 'quantity';
+    $ingredient_up_down = 'ASC';
+    break;
+    case 'quantity-down':
+    $ingredient_column = 'quantity';
+    $ingredient_up_down = 'DESC';
+    break;
+    case 'price-up':
+    $ingredient_column = 'price';
+    $ingredient_up_down = 'ASC';
+    break;
+    case 'price-down':
+    $ingredient_column = 'price';
+    $ingredient_up_down = 'DESC';
+    break;
+    case 'create-up':
+    $ingredient_column = 'create_at';
+    $ingredient_up_down = 'ASC';
+    break;
+    case 'create-down':
+    $ingredient_column = 'create_at';
+    $ingredient_up_down = 'DESC';
+    break;
+}
+
 $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
 // $totalPage = $totalRows / $perPage;
 $tst = $pdo->query('SELECT COUNT(*) FROM `ingredient`');
 $perPage = 10;
 $totalRows = $tst->fetch(PDO::FETCH_NUM)[0];
 $totalPages = ceil($totalRows / $perPage);
-if ($page < 1) {
-    header("Location:ingredient_datalist.php?page=1");
-    $page = 1;
-}
-if ($page > $totalPages) {
-    header("Location:ingredient_datalist.php?page={$totalPages}");
-    $page = $totalPages;
-}
 
-$params = [];
+// $params = [];
 
-$ingredient_column = isset($_POST['ingredient_column']) ? $_POST['ingredient_column'] : "sid";
-$ingredient_up_down = isset($_POST['ingredient_up_down']) ? $_POST['ingredient_up_down'] : "ASC";
-$params['ingredient_column'] = $ingredient_column;
-$params['ingredient_up_down'] = $ingredient_up_down;
+// $ingredient_column = isset($_POST['ingredient_column']) ? $_POST['ingredient_column'] : "sid";
+// $ingredient_up_down = isset($_POST['ingredient_up_down']) ? $_POST['ingredient_up_down'] : "ASC";
+// $params['ingredient_column'] = $ingredient_column;
+// $params['ingredient_up_down'] = $ingredient_up_down;
+
+
 
 
 $sql = sprintf(
