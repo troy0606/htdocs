@@ -13,6 +13,7 @@ require __DIR__ . "/ingredient_navbar.php";
         width: 90%;
         margin: auto;
     }
+
     .form-group small {
         color: red;
     }
@@ -130,61 +131,84 @@ require __DIR__ . "/ingredient_navbar.php";
                     </li>`;
         $("#pageContainer").html(str);
     };
+    let pageOption;
+    let status;
     // ----product page end---------------
 
+
     // ----product page previous next---------------
-    let pageOption;
-    $.ajax({
-        // type: "POST",
-        url: "ingredient_datalist_api.php",
-        dataType: "json",
-    }).done(function(pageVar) {
-        columnList(pageVar);
-        pageChange(pageVar);
-        totalPages = pageVar.totalPages;
-        $("#pageContainer").on("click", "#pageContainer li", function(e) {
-            lastPage = pageVar.page;
-            pageOption = {
-                previous: (lastPage) => {
-                    return page = lastPage - 1 ? lastPage - 1 : 1;
-                },
-                previousAll: (lastPage) => {
-                    return page = (lastPage - 3) ? lastPage - 3 : 1;
-                },
-                next: (lastPage) => {
-                    return page = (lastPage < totalPages) ? lastPage + 1 : totalPages;
-                },
-                nextAll: (lastPage) => {
-                    return page = (lastPage >= totalPages) ? totalPages : lastPage + 3;
-                }
-            }
-            e.stopPropagation();
-            pageId = $(this).attr("id");
-            if (pageId) {
-                pageOption[pageId](page);
-            } else {
-                page = $(this).text();
-            }
-            $.ajax({
-                type: "POST",
-                url: "ingredient_datalist_api.php",
-                data: {
-                    order:order,
-                    page: page,
-                },
-                dataType: "json"
-            }).done(function(pageVar) {
-                columnList(pageVar);
-                pageChange(pageVar);
+    let pageContent = function() {
+        $.ajax({
+            type: "post",
+            url: "ingredient_datalist_api.php",
+            dataType: "json",
+        }).done(function(pageVar) {
+            columnList(pageVar);
+            pageChange(pageVar);
+            totalPages = pageVar.totalPages;
+            $("#pageContainer").on("click", "#pageContainer li", function(e) {
                 lastPage = pageVar.page;
-                totalPages = pageVar.totalPages;
+                pageOption = {
+                    previous: (lastPage) => {
+                        return page = lastPage - 1 ? lastPage - 1 : 1;
+                    },
+                    previousAll: (lastPage) => {
+                        return page = (lastPage - 3) ? lastPage - 3 : 1;
+                    },
+                    next: (lastPage) => {
+                        return page = (lastPage < totalPages) ? lastPage + 1 : totalPages;
+                    },
+                    nextAll: (lastPage) => {
+                        return page = (lastPage >= totalPages) ? totalPages : lastPage + 3;
+                    }
+                }
+                e.stopPropagation();
+                pageId = $(this).attr("id");
+                if (pageId) {
+                    pageOption[pageId](page);
+                } else {
+                    page = $(this).text();
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "ingredient_datalist_api.php",
+                    data: {
+                        order: order,
+                        page: page,
+                    },
+                    dataType: "json"
+                }).done(function(pageVar) {
+                    columnList(pageVar);
+                    pageChange(pageVar);
+                    lastPage = pageVar.page;
+                    totalPages = pageVar.totalPages;
+                })
             })
-        })
 
+        });
+    }
+
+    $(document).ready(function() {
+        console.log(123);
     });
-
     // ----product page previous next end---------------
 
+    $("#navbarSupportedContent").find("a").click(function() {
+        status = $(this).data("status");
+        // $("#tdContainer").empty();
+        $.ajax({
+            type: "post",
+            url: "ingredient_datalist_api.php",
+            data: {
+                status: status
+            },
+            dataType: "json",
+        }).done(function(pageVar) {
+            data = pageVar.condition;
+            console.log(data);
+            pageContent(pageVar);
+        })
+    })
 
     // ----product delete---------------
     $("#tdContainer").on("click", ".del", function(e) {
@@ -264,8 +288,8 @@ require __DIR__ . "/ingredient_navbar.php";
             columnList(pageVar);
             pageChange(pageVar);
 
-            }, 'json')
-        });
+        }, 'json')
+    });
 
 
     // ----product order end---------------

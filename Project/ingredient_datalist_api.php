@@ -1,7 +1,7 @@
 <?php
 require __DIR__ . "/ingredient_connect.php";
-$order = isset($_POST['order'])?$_POST['order']:'create-down';
 
+$order = isset($_POST['order'])?$_POST['order']:'create-down';
 $ingredient_column;
 $ingredient_up_down;
 
@@ -32,9 +32,34 @@ switch($order){
     break;
 }
 
+$status = isset($_POST['status'])?($_POST['status']):'all';
+$condition;
+
+switch($status){
+    case 'all':
+    $condition = '1';
+    break;
+    case 'on_sale':
+    $condition = 'sale = 1';
+    break;
+    case 'off_sale':
+    $condition = 'sale = 2';
+    break;
+    case 'lack_stock':
+    $condition = 'quantity <= 11';
+    break;
+    case 'no_stock':
+    $ingredient_column = 'quantity = 0';
+    break;
+}
+
+switch($status){
+    case ''
+}
+
 $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
 // $totalPage = $totalRows / $perPage;
-$tst = $pdo->query('SELECT COUNT(*) FROM `ingredient`');
+$tst = $pdo->query("SELECT COUNT(*) FROM `ingredient` WHERE $condition");
 $perPage = 10;
 $totalRows = $tst->fetch(PDO::FETCH_NUM)[0];
 $totalPages = ceil($totalRows / $perPage);
@@ -53,9 +78,11 @@ $sql = sprintf(
     "SELECT `ingredient`.* ,`on-sale`.* 
 FROM `ingredient` 
 JOIN `on-sale` 
-ON `ingredient`.`sale` = `on-sale`.`sale_sid` 
+ON `ingredient`.`sale` = `on-sale`.`sale_sid`
+WHERE %s
 ORDER BY `%s` %s
 LIMIT %s,%s",
+    $condition,
     $ingredient_column,
     $ingredient_up_down,
     ($page - 1) * $perPage,
@@ -64,7 +91,10 @@ LIMIT %s,%s",
 $stmt = $pdo->query($sql);
 $rows = $stmt->fetchAll();
 
+
+
 $result = [
+    'condition' => $condition,
     'page' => $page,
     'perPage' => $perPage, 
     'totalPages' => $totalPages,
@@ -73,7 +103,7 @@ $result = [
 ];
 
 
-$sql = "SELECT `ingredient`.`sid` FROM `ingredient`";
+// $sql = "SELECT `ingredient`.`sid` FROM `ingredient`";
 
 echo json_encode($result, JSON_UNESCAPED_UNICODE);
 ?>

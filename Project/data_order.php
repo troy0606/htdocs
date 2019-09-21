@@ -59,6 +59,7 @@ $stmt = $pdo->query($sql);
 $rows = $stmt->fetchAll();
 
 $result = [
+    'condition' => $condition,
     'order' => $order,
     'page' => $page,
     'perPage' => $perPage, 
