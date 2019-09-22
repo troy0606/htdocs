@@ -24,8 +24,16 @@ require __DIR__ . "/ingredient_navbar.php";
             <nav style="width: 250px;">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <button id="allDelete" type="submit" class="btn btn-outline-warning" style="width:100px;  margin-right:20px;" onclick="return confirm('確定刪除嗎？')">批量刪除</button>
+                        <button id="allDelete" type="submit" class="btn btn-outline-warning" style="width:100px;  margin-right:20px;">批量刪除</button>
                     </li>
+                    <div id="statusSlide" class="invisible animated d-flex">
+                        <li class="nav-item">
+                            <button id='allOnSale' type="submit" class="btn btn-outline-warning" style="width:100px; margin-right:20px;">批量上架</button>
+                        </li>
+                        <li class="nav-item">
+                            <button id='allOffSale' type="submit" class="btn btn-outline-warning" style="width:100px; margin-right:20px;">批量下架</button>
+                        </li>
+                    </div>
                 </ul>
             </nav>
             <nav aria-label="Page navigation example" style="color: #15141A;">
@@ -52,6 +60,7 @@ require __DIR__ . "/ingredient_navbar.php";
             <tr>
                 <th scope="col"><input type="checkbox" onclick="checkAll()" id="check_all"><label for="check_all" style="margin:0;"><span></span></label>全選</th>
                 <th scope="col">品號</th>
+                <!-- <th scope="col">圖片</th> -->
                 <th scope="col">名稱</th>
                 <th scope="col">數量
                     <a href="#" data-order="quantity-up"><i class="fas fa-long-arrow-alt-up"></i></a>
@@ -74,6 +83,8 @@ require __DIR__ . "/ingredient_navbar.php";
     </table>
 </form>
 <script>
+    let stockStatus = ["", "上架中", "下架中"];
+
     // ----loading product list---------------
     let columnList = function(pageVar) {
         let str = "";
@@ -85,11 +96,12 @@ require __DIR__ . "/ingredient_navbar.php";
             <td>${a[2]}</td> 
                     <td>${a[7]}</td>
                     <td>${a[6]}</td>
-                    <td>${a[12]}</td>
+                    <td>${stockStatus[a[12]]}</td>
                     <td>${a[13]}</td>
-                    <td scope="col" data-sid="${a[0]}" class="del"><a href=""><i class="fas fa-trash-alt" style="color:#fff; margin-right:20px;"></i></a>
+                    <td scope="col" data-sid="${a[0]}"><a href=""><i class="fas fa-trash-alt del" style="color:#fff; margin-right:20px;"></i></a>
                         <a href="ingredient_edit.php?sid=${a[0]}"><i class="fas fa-edit" style="color:#fff;"></i></a></td></tr>`;
             i++;
+            console.log(a[12]);
         })
         $("#tdContainer").html(str);
         $("#totalCount").text(`資料總比數: ${pageVar.totalRows}`);
@@ -105,28 +117,28 @@ require __DIR__ . "/ingredient_navbar.php";
         let perPage = pageVar.perPage;
         let totalPages = pageVar.totalPages;
         let str = `<li class="page-item" id="previousAll">
-                        <a class=" page-link">
+                        <a class=" page-link" href="#">
                             <i class="fas fa-angle-double-left" style="color: #15141A;"></i>
                         </a>
                     </li>
                     <li class="page-item" id="previous">
-                        <a class="page-link">
+                        <a class="page-link" href="#">
                             <i class="fas fa-angle-left" style="color: #15141A;"></i>
                         </a>
                     </li>`;
         for (i = 1; i <= totalPages; i++) {
             let a = i == page ? "active" : "";
             str += ` <li class="page-item data-page="${i}" "${a}">
-                            <a class="page-link d-flex justify-content-center" style="width:55px; margin:0 auto; color: #15141A;">${i}</a>
+                            <a class="page-link d-flex justify-content-center" style="width:55px; margin:0 auto; color: #15141A;" href="#">${i}</a>
                         </li>`;
         }
         str += `<li class="page-item" id="next">
-                        <a class="page-link">
+                        <a class="page-link" href="#">
                             <i class="fas fa-angle-right" style="color: #15141A;"></i>
                         </a>
                     </li>
                     <li class="page-item" id="nextAll">
-                        <a class="page-link">
+                        <a class="page-link" href="#">
                             <i class="fas fa-angle-double-right" style="color: #15141A;"></i>
                         </a>
                     </li>`;
@@ -137,8 +149,8 @@ require __DIR__ . "/ingredient_navbar.php";
     let status;
     let order;
     let page;
-    // ----product page previous next---------------
     let pageOption;
+    let pageStatus;
     let pageContent = function() {
         $.ajax({
             type: "post",
@@ -153,12 +165,9 @@ require __DIR__ . "/ingredient_navbar.php";
             columnList(pageVar);
             pageChange(pageVar);
             totalPages = pageVar.totalPages;
-            // status = pageVar.condition;
             order = pageVar.order;
-            // console.log(order);
-            // page = pageVar.page;
+            // ----product page previous next---------------
             $("#pageContainer").on("click", "#pageContainer li", function(e) {
-                console.log(order);
                 lastPage = pageVar.page;
                 pageOption = {
                     previous: (lastPage) => {
@@ -197,6 +206,8 @@ require __DIR__ . "/ingredient_navbar.php";
                     totalPages = pageVar.totalPages;
                 })
             })
+            // ----product page previous next end---------------
+            // ----product order---------------
             $("#all_form a").click(function() {
                 order = $(this).data("order");
                 $.post("ingredient_datalist_api.php", {
@@ -209,30 +220,43 @@ require __DIR__ . "/ingredient_navbar.php";
                     pageChange(pageVar);
                 }, 'json')
             });
+            // ----product order end---------------
         });
     }
     pageContent();
 
-    // ----product page previous next end---------------
-
-
-    // ----product order---------------
-    // $("#all_form a").click(function() {
-    //     order = $(this).data("order");
-    //     $.post("ingredient_datalist_api.php", {
-    //         order: order
-    //     }, function(pageVar) {
-    //         // $("#tdContainer").empty();
-    //         columnList(pageVar);
-    //         pageChange(pageVar);
-    //     }, 'json')
-    // });
-    // ----product order end---------------
-
     // ----product status---------------
-    $("#navbarSupportedContent").find("a").click(function() {
+    $("#navbarSupportedContent a").click(function() {
         status = $(this).data("status");
-        // $("#tdContainer").empty();
+        $("#navbarSupportedContent").find("button").removeClass("active");
+        $(this).find("button").addClass("active");
+        switch (status) {
+            case "all":
+                $("#allDelete").css("display", "block");
+                $("#allOnSale").css("display", "block");
+                $("#allOffSale").css("display", "block");
+                break;
+            case "on_sale":
+                $("#allDelete").css("display", "block");
+                $("#allOnSale").css("display", "none");
+                $("#allOffSale").css("display", "block");
+                break;
+            case "off_sale":
+                $("#allDelete").css("display", "block");
+                $("#allOnSale").css("display", "block");
+                $("#allOffSale").css("display", "none");
+                break;
+            case "lack_stock":
+                $("#allDelete").css("display", "block");
+                $("#allOffSale").css("display", "block");
+                $("#allOffSale").css("display", "block");
+                break;
+            case "no_stock":
+                $("#allDelete").css("display", "block");
+                $("#allOnSale").css("display", "none");
+                $("#allOffSale").css("display", "none");
+                break;
+        }
         $.ajax({
             type: "post",
             url: "ingredient_datalist_api.php",
@@ -243,6 +267,7 @@ require __DIR__ . "/ingredient_navbar.php";
         }).done(function(pageVar) {
             columnList(pageVar);
             pageChange(pageVar);
+            pageStatus = pageVar.condition;
         })
     })
     // ----product status end---------------
@@ -315,35 +340,80 @@ require __DIR__ . "/ingredient_navbar.php";
     // ----product search end---------------
 </script>
 
-<!-- 全選 checkbox start -->
-
-<script>
-    function checkAll() {
-        var checkAllEl = document.getElementById("check_all");
-        if (checkAllEl.checked == true) {
-            var checkOnes = document.getElementsByName("checkOne[]");
-            for (var i = 0; i < checkOnes.length; i++) {
-                checkOnes[i].checked = true;
-            }
-        } else {
-            var checkOnes = document.getElementsByName("checkOne[]");
-            for (var i = 0; i < checkOnes.length; i++) {
-                checkOnes[i].checked = false;
-            }
-        }
-    }
-</script>
-
-<!-- 全選 checkbox end -->
-
 <!-- 批量操作 start -->
 <script>
-    var form_submit = document.getElementById('all_form');
-    var go = document.getElementById('allDelete');
-    go.addEventListener('click', () => {
-        form_submit.action = 'ingredient_allDelete_api.php';
-        form_submit.submit();
+    $("#allDelete").click(function() {
+        if (confirm("確定批量刪除嗎?")) {
+            $("#all_form").attr("action", 'ingredient_allDelete_api.php');
+            $("#all_form").submit();
+        } else {
+            alert("取消刪除");
+        }
+    })
+
+    $("#allOnSale").click(function() {
+        if (confirm("確定批量上架嗎?")) {
+            $("#all_form").attr("action", 'ingredient_allOnSale_api.php');
+            $("#all_form").submit();
+        } else {
+            alert("取消上架");
+        }
+    })
+
+    $("#allOffSale").click(function() {
+        if (confirm("確定批量下架嗎?")) {
+            $("#all_form").attr("action", 'ingredient_allOffSale_api.php');
+            $("#all_form").submit();
+        } else {
+            alert("取消下架");
+        }
+    })
+
+</script>
+<script>
+    //  JQ slide-In status bar 
+    $("#ulSlide").hover(function() {
+        $("#conditionSlide").toggleClass("fadeInLeft").removeClass("fadeOutLeft").removeClass("invisible");
+    }, function() {
+        $("#conditionSlide").removeClass("fadeInLeft").addClass("fadeOutLeft");
+    })
+    // JQ slide-In status bar end 
+
+    // JQ checkBox
+
+    let totalCheckBox = $("#tdContainer  :checkbox").length;
+    let checkCount = $("#tdContainer  :checked").length;
+    $("#tdContainer :checkbox").click(function() {
+        checkCount = $("tdContainer :checked").length;
+        if (checkCount == totalCheckBox) {
+            $("#check_all").prop("checked", true);
+        } else {
+            $("#check_all").prop("checked", false);
+        }
+
+        if ($(this).attr("checked")) {
+            $("this").closest("tr").css("background", "#FF8800");
+        } else {
+            $("tr").css("background", "none");
+        }
+
     });
+
+    $("#check_all").click(function() {
+        let ifCheck = $(this).prop("checked");
+        if (ifCheck) {
+            $("#tdContainer :checkbox").prop("checked", true);
+        } else {
+            $("#tdContainer :checkbox").prop("checked", false);
+        }
+    });
+
+    $("#allDelete").closest("ul").hover(function(){
+        $("#statusSlide").addClass("fadeInLeft").removeClass("fadeOutLeft").removeClass("invisible");
+    },function(){
+        $("#statusSlide").removeClass("fadeInLeft").addClass("fadeOutLeft").add("invisible");
+    })
+    // JQ  checkbox end
 </script>
 <?php
 require __DIR__ . "/footer_in.php";

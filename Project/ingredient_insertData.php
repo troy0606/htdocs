@@ -66,7 +66,7 @@ $tag = [
     <h3 style="color:#FFC107; padding: 0 50px 0 0;">新增商品頁面</h3>
     <ul class="navbar-nav">
         <li class="nav-item <?= $page_name == 'ingredient_datalist' ? 'active' : '' ?> ">
-            <a class="nav-link" href="ingredient_datalist.php"><button type="button" class="btn btn-outline-warning" style="width:200px;">返回商品列表</button></a>
+            <a class="nav-link" href="ingredient_datalist02.php"><button type="button" class="btn btn-outline-warning" style="width:200px;">返回商品列表</button></a>
         </li>
     </ul>
 </nav>

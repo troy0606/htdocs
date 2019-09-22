@@ -49,7 +49,7 @@ switch($status){
     $condition = 'quantity <= 11';
     break;
     case 'no_stock':
-    $ingredient_column = 'quantity = 0';
+    $condition = 'quantity = 0';
     break;
 }
 

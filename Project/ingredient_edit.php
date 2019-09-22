@@ -82,7 +82,7 @@ $checkedTag = json_decode($row['tag'], true);
             <div class="card text-white bg-dark">
                 <div class="card-body">
                     <div class="d-flex"><h5 class=" card-title">修改資料</h5>
-                    <a href="ingredient_datalist.php"><button class="btn btn-outline-warning">返回</button></a></div>
+                    <a href="ingredient_datalist02.php"><button class="btn btn-outline-warning">返回</button></a></div>
                     <form name="form1" onsubmit="return check()" enctype="multipart/form-data">
                         <input type="hidden" name="sid" value="<?= htmlentities($row['sid']) ?>">
                         <!-- 資料送出時返回函式check的值 -->
@@ -194,7 +194,7 @@ $checkedTag = json_decode($row['tag'], true);
                             if (json.success) {
                                 bar_info.className = "alert alert-success";
                                 setTimeout(function() {
-                                    location.href = 'ingredient_datalist.php';
+                                    location.href = 'ingredient_datalist02.php';
                                 }, 1000);
                             } else {
                                 bar_info.className = "alert alert-danger";
